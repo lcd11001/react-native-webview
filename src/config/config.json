@@ -1,0 +1,73 @@
+{
+    "catalogs": [
+        {
+            "id": 0,
+            "title": "Coca Cola",
+            "description": "Promote all Coca-Cola products in one game (Regular, Light, Zero).\nBe the relay of their famous Christmas commercials.",
+            "thumbnail": "cocacola.jpg",
+            "orientation": "portrait",
+            "type": "VBAN",
+            "path": "coca"
+        },
+
+        {
+            "id": 1,
+            "title": "Interactive Videos",
+            "description": "",
+            "thumbnail": "coco.jpg",
+            "orientation": "landscape",
+            "type": "VJAY",
+            "path": "coco"
+        },
+
+        {
+            "id": 2,
+            "title": "FIFA18",
+            "description": "Electonic Arts",
+            "thumbnail": "fifa18.jpg",
+            "orientation": "landscape",
+            "type": "VHERO",
+            "path": "fifa18"
+        },
+
+        {
+            "id": 3,
+            "title": "Classic Displays",
+            "description": "Food & beverages",
+            "thumbnail": "hot_nuts.jpg",
+            "orientation": "portrait",
+            "type": "INTERSTITIAL",
+            "path": "hot_nuts"
+        },
+
+        {
+            "id": 4,
+            "title": "Branded Mini-Game",
+            "description": "Extreme Sensations in Dubai!",
+            "thumbnail": "kite_surfing.jpg",
+            "orientation": "force-landscape",
+            "type": "MIG",
+            "path": "kite_surfing"
+        },
+
+        {
+            "id": 5,
+            "title": "Dynamic Surveys",
+            "description": "Mobile phone",
+            "thumbnail": "samsung_tle.jpg",
+            "orientation": "force-landscape",
+            "type": "FORM",
+            "path": "samsung_tle"
+        },
+
+        {
+            "id": 6,
+            "title": "Motion Interstitial",
+            "description": "X-Men : Apocalypse | Magneto",
+            "thumbnail": "xmen_apo_magneto_en.jpg",
+            "orientation": "landscape",
+            "type": "M-INT",
+            "path": "xmen_apo_magneto_en"
+        }
+    ]
+}
