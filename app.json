@@ -1,5 +1,11 @@
 {
   "expo": {
-    "sdkVersion": "23.0.0"
+    "sdkVersion": "23.0.0",
+    "icon": "./data/icon/Newsvine_512x512.png",
+    "splash": {
+      "image": "./data/splash/LifeShroom.png",
+      "backgroundColor": "#FEF9B0",
+      "resizeMode": "contain"
+    }
   }
 }
