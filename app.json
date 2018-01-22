@@ -6,6 +6,7 @@
       "image": "./data/splash/LifeShroom.png",
       "backgroundColor": "#FEF9B0",
       "resizeMode": "contain"
-    }
+    },
+    "orientation": "portrait"
   }
 }
