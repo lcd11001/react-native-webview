@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Modal, WebView, StatusBar } from 'react-native';
 import { AppLoading } from 'expo';
 
 import global from './src/common/global';
@@ -15,6 +15,8 @@ export default class App extends React.Component {
     this.state = {
       isReady: false,
       delaySplash: 2000, // miliseconds
+      modalVisible: false,
+      modalUrl: ''
     }
   }
 
@@ -28,6 +30,7 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           <Text style={styles.header}>Testing local webview</Text>
+          
           <FlatList
             style={styles.list}
             data = {global.getCatalogs()}
@@ -38,13 +41,16 @@ export default class App extends React.Component {
               return (
                 <CatalogItem
                   onSelected={()=>{
-                    console.log('you clicked ' + rowData.item.title);
+                    //console.log('you clicked ' + rowData.item.title);
+                    this.onModalOpen( rowData.item.path )
                   }}
                   {...rowData.item}
                 />
               );
             } }
           />
+
+          {this.renderModal()}
         </View>
       );
     }
@@ -58,6 +64,45 @@ export default class App extends React.Component {
         }
       />
     )
+  }
+
+  renderModal() {
+    return (
+        <Modal
+            style={styles.modal}
+            animationType="slide"
+            visible={this.state.modalVisible}
+            onRequestClose={this.onModalClose}
+        >
+            <View style={styles.modalContent}>
+                <WebView
+                    scalesPageToFit
+                    javaScriptEnabled
+                    //source={{uri: this.state.modalUrl}}
+                    source={global.getHtml(this.state.modalUrl)}
+                    onError={(event)=>{
+                      console.log('webview error ' + JSON.stringify(event, nul, 2));
+                    }}
+                    renderError={()=>{
+                      console.log('webview renderError ');
+                    }}
+                />
+            </View>
+        </Modal>
+    );
+  }
+
+  onModalOpen(url) {
+    this.setState({
+        modalVisible: true,
+        modalUrl: url
+    });
+  }
+
+  onModalClose() {
+    this.setState({
+        modalVisible: false
+    })
   }
 
   delay(t) {
@@ -90,5 +135,20 @@ const styles = StyleSheet.create({
   list: {
     width: "100%",
     //backgroundColor: "#FCE5BD"
+  },
+
+  modal: {
+    backgroundColor: 'blue',
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    top: 0
+  },
+
+  modalContent: {
+    flex: 1,
+    justifyContent: 'center',
+    backgroundColor: 'red',
   }
 });
