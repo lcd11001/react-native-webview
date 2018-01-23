@@ -2,6 +2,9 @@ import React from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { AppLoading } from 'expo';
 
+import global from './src/common/global';
+import CatalogItem from './src/components/CatalogItem';
+
 const AutoBind = require('auto-bind');
 
 export default class App extends React.Component {
@@ -25,8 +28,23 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           <Text style={styles.header}>Testing local webview</Text>
-          <FlatList>
-          </FlatList>
+          <FlatList
+            style={styles.list}
+            data = {global.getCatalogs()}
+            keyExtractor = { (item, index) => {
+              return item.id
+            }}
+            renderItem={ (rowData) => {
+              return (
+                <CatalogItem
+                  onClicked={()=>{
+                    console.log('you clicked ' + rowData.item.title);
+                  }}
+                  {...rowData.item}
+                />
+              );
+            } }
+          />
         </View>
       );
     }
@@ -66,5 +84,10 @@ const styles = StyleSheet.create({
 
   header: {
     fontSize: 40
+  },
+
+  list: {
+    width: "100%",
+    // backgroundColor: "red"
   }
 });

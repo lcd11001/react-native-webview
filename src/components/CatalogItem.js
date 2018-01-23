@@ -37,20 +37,19 @@ export default class CatalogItem extends Component {
                 <View style={styles.item}>
                     <Image 
                         ref={(component) => imageComponent = component}
-                        source={ {uri: global.getThumnail(thumbnail)} }
-                        defaultSource={ global.getDefaultThumnail() }
+                        source={ global.getThumbnail(thumbnail) }
+                        defaultSource={ global.getDefaultThumbnail() }
                         style={styles.thumbnail}
                         onError={ (e) => {
                             if (Platform.OS !== 'ios')
                             {                                  
-                                //imageComponent.setNativeProps({ src: [{ source: global.getDefaultThumnail() }] })
-                                console.log('can not get thumnail ' + thumbnail);
+                                imageComponent.setNativeProps({ src: [{ uri: global.getDefaultThumbnailFromBase64() }] })
                             }
                         }}
                     />
                     <View style={styles.detail}>
-                        <Text>{title}</Text>
-                        <Text>{description}</Text>
+                        <Text style={styles.title}>{title}</Text>
+                        <Text style={styles.description}>{description}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -71,26 +70,43 @@ CatalogItem.propTypes = {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: 100,
+        width: "100%",
         height: 200,
-        backgroundColor: "yellow"
+        // backgroundColor: "yellow"
     },
 
     item: {
         flex: 1,
         flexDirection: "row",
         padding: 10,
-        backgroundColor: "blue"
+        // backgroundColor: "blue"
     },
 
     thumbnail: {
+        padding: 2,
+        flex: 1,
+        //backgroundColor: "gray",
+        width: "auto",
+        height: "100%",
         resizeMode: "cover",
-        padding: 2
+        borderTopLeftRadius: 20,
+        borderBottomLeftRadius: 20
     },
 
     detail: {
         backgroundColor: "green",
-        flex: 1,
-        flexDirection: "column"
+        flex: 2,
+        flexDirection: "column",
+        padding: 20,
+        borderTopRightRadius: 20,
+        borderBottomRightRadius: 20
+    },
+
+    title: {
+        fontSize: 20
+    },
+
+    description: {
+        fontSize: 15
     }
 });
