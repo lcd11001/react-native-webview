@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
 import { AppLoading } from 'expo';
 
-const autoBind = require('auto-bind');
+const AutoBind = require('auto-bind');
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
-    autoBind(this);
+    AutoBind(this);
     
     this.state = {
       isReady: false,
@@ -24,7 +24,9 @@ export default class App extends React.Component {
     if (this.state.isReady) {
       return (
         <View style={styles.container}>
-          <Text>Testing local webview</Text>
+          <Text style={styles.header}>Testing local webview</Text>
+          <FlatList>
+          </FlatList>
         </View>
       );
     }
@@ -59,6 +61,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
   },
+
+  header: {
+    fontSize: 40
+  }
 });
