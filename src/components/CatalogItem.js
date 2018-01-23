@@ -24,7 +24,7 @@ export default class CatalogItem extends Component {
             orientation,
             type,
             path,
-            onClicked
+            onSelected
         } = this.props;
 
         let imageComponent = null;
@@ -32,7 +32,7 @@ export default class CatalogItem extends Component {
         return (
             <TouchableOpacity 
                 style={styles.container}
-                onClicked={onClicked}
+                onPress={onSelected}
             >
                 <View style={styles.item}>
                     <Image 
@@ -64,7 +64,7 @@ CatalogItem.propTypes = {
     orientation: PropTypes.string,
     type: PropTypes.string,
     path: PropTypes.string.isRequired,
-    onClicked: PropTypes.func.isRequired
+    onSelected: PropTypes.func.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     },
 
     detail: {
-        backgroundColor: "green",
+        backgroundColor: "#78BEB3",
         flex: 2,
         flexDirection: "column",
         padding: 20,
@@ -103,10 +103,12 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        fontSize: 20
+        fontSize: 20,
+        color: "#020242"
     },
 
     description: {
-        fontSize: 15
+        fontSize: 15,
+        color: "#382FFF"
     }
 });

@@ -37,7 +37,7 @@ export default class App extends React.Component {
             renderItem={ (rowData) => {
               return (
                 <CatalogItem
-                  onClicked={()=>{
+                  onSelected={()=>{
                     console.log('you clicked ' + rowData.item.title);
                   }}
                   {...rowData.item}
@@ -77,17 +77,18 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FCE5BD',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
 
   header: {
-    fontSize: 40
+    fontSize: 40,
+    color: "#F44A3E"
   },
 
   list: {
     width: "100%",
-    // backgroundColor: "red"
+    //backgroundColor: "#FCE5BD"
   }
 });
