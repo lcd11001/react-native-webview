@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {
-    StyleSheet, TouchableOpacity, View, Text
+    StyleSheet, TouchableOpacity, View, Text, Image, Platform
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-import global from '../common/global'
+import global from '../common/global';
 
 const AutoBind = require('auto-bind');
 
@@ -37,13 +37,14 @@ export default class CatalogItem extends Component {
                 <View style={styles.item}>
                     <Image 
                         ref={(component) => imageComponent = component}
-                        source={ require(global.getThumnail(thumbnail)) }
-                        defaultSource={ require(global.getDefaultThumnail()) }
+                        source={ {uri: global.getThumnail(thumbnail)} }
+                        defaultSource={ global.getDefaultThumnail() }
                         style={styles.thumbnail}
                         onError={ (e) => {
                             if (Platform.OS !== 'ios')
                             {                                  
-                                imageComponent.setNativeProps({ src: [{ source: require(global.getDefaultThumnail()) }] })
+                                //imageComponent.setNativeProps({ src: [{ source: global.getDefaultThumnail() }] })
+                                console.log('can not get thumnail ' + thumbnail);
                             }
                         }}
                     />
@@ -69,7 +70,8 @@ CatalogItem.propTypes = {
 
 const styles = StyleSheet.create({
     container: {
-        width: "100%",
+        flex: 1,
+        width: 100,
         height: 200,
         backgroundColor: "yellow"
     },
