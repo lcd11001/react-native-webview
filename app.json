@@ -1,5 +1,8 @@
 {
   "expo": {
+    "name": "Local Webview",
+    "slug": "local-webview",
+    "privacy": "unlisted",
     "sdkVersion": "23.0.0",
     "icon": "./data/icon/Newsvine_512x512.png",
     "splash": {
@@ -7,6 +10,14 @@
       "backgroundColor": "#FEF9B0",
       "resizeMode": "contain"
     },
-    "orientation": "portrait"
+    "orientation": "portrait",
+    "ios": {
+        "bundleIdentifier": "lcd.test.reactnative.localwebview",
+        "buildNumber": "0.0.1"
+    },
+    "android": {
+        "package": "lcd.test.reactnative.localwebview",
+        "versionCode": 1,
+    }
   }
 }
