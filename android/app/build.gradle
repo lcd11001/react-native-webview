@@ -116,11 +116,11 @@ android {
         }
     }
     signingConfigs {
-        GL_keystore {
-            storeFile file('GAMELOFT_KEY.keystore')
-            storePassword '123456'
-            keyAlias 'gameloft'
-            keyPassword '123456'
+        my_keystore {
+            storeFile file('../keystores/my-release-key.keystore')
+            storePassword 'b@byjumb0'
+            keyAlias 'BabyJumbo'
+            keyPassword 'b@byjumb0'
         }
     }
 
@@ -128,12 +128,12 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
-            signingConfig signingConfigs.GL_keystore
+            signingConfig signingConfigs.my_keystore
         }
 
         debug {
             // Fix: build debug can not overwrite on previous release apk
-            signingConfig signingConfigs.GL_keystore
+            signingConfig signingConfigs.my_keystore
         }
     }
     // applicationVariants are e.g. debug, release
