@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, FlatList, Modal, WebView, StatusBar } from 'react-native';
-import { AppLoading } from 'expo';
 
 import global from './src/common/global';
 import CatalogItem from './src/components/CatalogItem';
@@ -55,15 +54,7 @@ export default class App extends React.Component {
       );
     }
     
-    return (
-      <AppLoading
-        onError={() => {
-            console.warn('App Loading Error');
-            this.setState({isReady: true});
-          }
-        }
-      />
-    )
+    return null;
   }
 
   renderModal() {
