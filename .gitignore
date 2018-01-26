@@ -19,3 +19,5 @@ yarn-error.log*
 /android/build
 /android/app/build
 /android/.gradle
+/android/.settings
+/android/app/.settings

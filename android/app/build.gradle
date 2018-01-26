@@ -154,8 +154,15 @@ android {
 dependencies {
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
+    
+    // https://facebook.github.io/react-native/docs/android-building-from-source.html
     compile "com.facebook.react:react-native:+"  // From node_modules
+    // compile project(':ReactAndroid')
 }
+
+// configurations.all {
+//     exclude group: 'com.facebook.react', module: 'react-native'
+// }
 
 // Run this once to be able to run the application with BUCK
 // puts all compile dependencies into folder libs for BUCK to use
