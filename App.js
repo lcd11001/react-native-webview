@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Modal, WebView, StatusBar } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Modal, WebView, StatusBar, Image } from 'react-native';
 
 import global from './src/common/global';
 import CatalogItem from './src/components/CatalogItem';
@@ -54,7 +54,15 @@ export default class App extends React.Component {
       );
     }
     
-    return null;
+    return (
+      <View style = {[styles.container, {backgroundColor: "#FEF9B0"}]}>
+        <Image
+          source={require("./data/splash/LifeShroom.png")}
+          style={{width: "100%", height: "100%"}}
+          resizeMode={"contain"}
+        />
+      </View>
+    );
   }
 
   renderModal() {
