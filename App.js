@@ -92,8 +92,8 @@ export default class App extends React.Component {
   }
 
   onModalOpen(url) {
-    console.log('onModalOpen');
-    StatusBar.setHidden(true);
+    // console.log('onModalOpen');
+    // StatusBar.setHidden(true);
     this.setState({
         modalVisible: true,
         modalUrl: url
@@ -101,8 +101,8 @@ export default class App extends React.Component {
   }
 
   onModalClose() {
-    console.log('onModalClose');
-    StatusBar.setHidden(false);
+    // console.log('onModalClose');
+    // StatusBar.setHidden(false);
     this.setState({
         modalVisible: false
     })
