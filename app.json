@@ -12,12 +12,13 @@
     },
     "orientation": "portrait",
     "ios": {
-        "bundleIdentifier": "lcd.test.reactnative.localwebview",
-        "buildNumber": "0.0.1"
+      "bundleIdentifier": "lcd.test.reactnative.localwebview",
+      "buildNumber": "0.0.1"
     },
     "android": {
-        "package": "lcd.test.reactnative.localwebview",
-        "versionCode": 1,
-    }
+      "package": "lcd.test.reactnative.localwebview",
+      "versionCode": 1
+    },
+    "version": "0.0.1"
   }
 }
