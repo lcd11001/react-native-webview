@@ -20,5 +20,7 @@
       "versionCode": 1
     },
     "version": "0.0.1"
-  }
+  },
+  "name": "ReactNativeLocalWebview",
+  "displayName": "Local Webview"
 }
