@@ -24,25 +24,26 @@ export default class CatalogItem extends Component {
             orientation,
             type,
             path,
-            onSelected
+            onSelected,
+            serverUrl
         } = this.props;
 
         let imageComponent = null;
 
         return (
-            <TouchableOpacity 
+            <TouchableOpacity
                 style={styles.container}
                 onPress={onSelected}
             >
                 <View style={styles.item}>
-                    <Image 
+                    <Image
                         ref={(component) => imageComponent = component}
-                        source={ global.getThumbnail(thumbnail) }
+                        source={ global.getThumbnail(serverUrl, thumbnail) }
                         defaultSource={ global.getDefaultThumbnail() }
                         style={styles.thumbnail}
                         onError={ (e) => {
                             if (Platform.OS !== 'ios')
-                            {                                  
+                            {
                                 imageComponent.setNativeProps({ src: [{ uri: global.getDefaultThumbnailFromBase64() }] })
                             }
                         }}
@@ -64,7 +65,8 @@ CatalogItem.propTypes = {
     orientation: PropTypes.string,
     type: PropTypes.string,
     path: PropTypes.string.isRequired,
-    onSelected: PropTypes.func.isRequired
+    onSelected: PropTypes.func.isRequired,
+    serverUrl: PropTypes.string
 }
 
 const styles = StyleSheet.create({
@@ -90,7 +92,11 @@ const styles = StyleSheet.create({
         height: "100%",
         resizeMode: "cover",
         borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20
+        borderBottomLeftRadius: 20,
+        //overflow: "hidden",
+        // borderWidth: 2,
+        // borderColor: "#F00",
+        // borderRadius: 20
     },
 
     detail: {

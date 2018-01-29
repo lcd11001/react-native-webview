@@ -4,7 +4,11 @@ export default class global {
         return json.catalogs;
     }
 
-    static getHtml(path) {
+    static getHtml(server, path) {
+        if (true) {
+          let fullPath = server + '/catalogs/' + path + '/index.html';
+          return {uri: fullPath};
+        }
         // https://stackoverflow.com/questions/42851296/react-native-load-local-html-file-into-webview
         switch(path)
         {
@@ -34,8 +38,12 @@ export default class global {
         return {html: defaultHtml.html};
     }
 
-    static getThumbnail (file) {
-        //return "./test/thumbnails/" + file
+    static getThumbnail (server, file) {
+      if (true) {
+        let fullPath = server + "/thumbnails/" + file;
+        return {uri: fullPath};
+      }
+
 
         // https://forums.expo.io/t/folder-location-for-dynamic-local-images/2438/3
         switch (file)
@@ -64,7 +72,7 @@ export default class global {
         }
         return {uri: './unknown.jpg'};
     };
-    
+
     static getDefaultThumbnail () {
         return require("../../data/_default/thumbnail/no-thumbnail.png");
     }

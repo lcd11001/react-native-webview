@@ -20,6 +20,7 @@
     "auto-bind": "^1.2.0",
     "react": "16.0.0",
     "react-native": "0.50.3",
+    "react-native-fs": "^2.9.7",
     "react-native-static-server": "^0.2.4"
   }
 }
