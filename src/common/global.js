@@ -7,6 +7,7 @@ export default class global {
     static getHtml(server, path) {
         if (true) {
           let fullPath = server + '/catalogs/' + path + '/index.html';
+          console.log('getHtml ' + fullPath);
           return {uri: fullPath};
         }
         // https://stackoverflow.com/questions/42851296/react-native-load-local-html-file-into-webview
@@ -41,6 +42,7 @@ export default class global {
     static getThumbnail (server, file) {
       if (true) {
         let fullPath = server + "/thumbnails/" + file;
+        console.log('getThumbnail ' + fullPath);
         return {uri: fullPath};
       }
 

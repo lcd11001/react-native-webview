@@ -35,12 +35,30 @@ export default class App extends React.Component {
       serverUrl: ''
     }
 
+
+    //  The absolute path to the main bundle directory
+    console.log('MainBundlePath:' + RNFS.MainBundlePath) ;
+    // The absolute path to the caches directory
+    console.log('CachesDirectoryPath:' + RNFS.CachesDirectoryPath) ;
+    // The absolute path to the document directory
+    console.log('DocumentDirectoryPath:' + RNFS.DocumentDirectoryPath) ;
+    // The absolute path to the temporary directory (iOS only)
+    console.log('TemporaryDirectoryPath:' + RNFS.TemporaryDirectoryPath) ;
+    // The absolute path to the external files, shared directory (android only)
+    console.log('ExternalDirectoryPath:' + RNFS.ExternalDirectoryPath) ;
+    // The absolute path to the external storage, shared directory (android only)
+    console.log('ExternalStorageDirectoryPath:' + RNFS.ExternalStorageDirectoryPath) ;
+    // The absolute path to the NSLibraryDirectory (iOS only)
+    console.log('LibraryDirectoryPath:' + RNFS.LibraryDirectoryPath) ;
+    // The absolute path to the pictures directory (android only)
+    console.log('PicturesDirectoryPath:' + RNFS.PicturesDirectoryPath) ;
+
     // this.serverPath = RNFS.DocumentDirectoryPath + '/test';
     // path where files will be served from (index.html here)
-    this.serverPath = (Platform.OS == 'ios' ? RNFS.MainBundlePath : RNFS.DocumentDirectoryPath) + '/test';
+    this.serverPath = (Platform.OS == 'ios' ? RNFS.MainBundlePath : RNFS.ExternalDirectoryPath) + '/test/';
     console.log('server path: ' + this.serverPath);
 
-    this.server = new StaticServer(0, this.serverPath, {localOnly : true });
+    this.server = new StaticServer(0, this.serverPath, {localOnly : true, keepAlive : true});
     this.server.start().then( (url) => {
       console.log('server started at url ' + url);
 
