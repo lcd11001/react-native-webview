@@ -137,6 +137,7 @@ export default class App extends React.Component {
     return (
         <Modal
             style={styles.modal}
+            transparent={true}
             animationType="slide"
             visible={this.state.modalVisible}
             onRequestClose={this.onModalClose}
@@ -151,6 +152,7 @@ export default class App extends React.Component {
                 <WebView
                     scalesPageToFit
                     javaScriptEnabled
+                    style={styles.webview}
                     //source={{uri: this.state.modalUrl}}
                     source={global.getHtml(this.state.serverUrl, this.state.modalUrl)}
                     onError={(event)=>{
@@ -234,7 +236,7 @@ const styles = StyleSheet.create({
   },
 
   modal: {
-    backgroundColor: 'blue',
+    //backgroundColor: 'blue',
     position: 'absolute',
     bottom: 0,
     left: 0,
@@ -245,7 +247,7 @@ const styles = StyleSheet.create({
   modalContent: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
   },
 
   closeButton: {
@@ -253,12 +255,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    backgroundColor: 'transparent'
   },
 
   closeText: {
-    color: "yellow",
-    backgroundColor: "red",
+    color: 'yellow',
+    backgroundColor: 'red',
     fontSize: 20,
     padding: 10
+  },
+
+  webview: {
+    backgroundColor: 'transparent'
   }
 });
