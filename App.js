@@ -1,5 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Modal, WebView, StatusBar, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Modal, WebView, StatusBar, Image, TouchableOpacity } from 'react-native';
+
+import StaticServer from 'react-native-static-server';
+import RNFS from 'react-native-fs';
 
 import global from './src/common/global';
 import CatalogItem from './src/components/CatalogItem';
@@ -10,13 +13,30 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     AutoBind(this);
-    
+
     this.state = {
       isReady: false,
       delaySplash: 2000, // miliseconds
       modalVisible: false,
-      modalUrl: ''
+      modalUrl: '',
+      serverStatus: 0, // -1: false, 0: not created, 1: success
+      serverUrl: ''
     }
+
+    // this.serverPath = RNFS.DocumentDirectoryPath + '/test';
+    // path where files will be served from (index.html here)
+    this.serverPath = RNFS.MainBundlePath + '/test';
+    console.log('server path: ' + this.serverPath);
+
+    this.server = new StaticServer(0, this.serverPath, {localOnly : true });
+    this.server.start().then( (url) => {
+      console.log('server started at url ' + url);
+
+      this.setState({
+        serverStatus: 1,
+        serverUrl: url
+      })
+    });
   }
 
   componentWillMount() {
@@ -26,10 +46,18 @@ export default class App extends React.Component {
   render() {
     // https://docs.expo.io/versions/latest/sdk/app-loading.html
     if (this.state.isReady) {
+      if (this.state.serverStatus == -1) {
+        return (
+          <View style={[styles.container, {justifyContent: 'center'}]}>
+            <Text style={styles.header}>Fail to create local server</Text>
+          </View>
+        );
+      }
+
       return (
         <View style={styles.container}>
           <Text style={styles.header}>Testing local webview</Text>
-          
+
           <FlatList
             style={styles.list}
             data = {global.getCatalogs()}
@@ -43,6 +71,7 @@ export default class App extends React.Component {
                     //console.log('you clicked ' + rowData.item.title);
                     this.onModalOpen( rowData.item.path )
                   }}
+                  serverUrl={this.state.serverUrl}
                   {...rowData.item}
                 />
               );
@@ -53,7 +82,7 @@ export default class App extends React.Component {
         </View>
       );
     }
-    
+
     return (
       <View style = {[styles.container, {backgroundColor: "#FEF9B0"}]}>
         <Image
@@ -74,13 +103,19 @@ export default class App extends React.Component {
             onRequestClose={this.onModalClose}
         >
             <View style={styles.modalContent}>
+                <TouchableOpacity
+                    onPress={this.onModalClose}
+                    style={styles.closeButton}
+                >
+                      <Text style={styles.closeText}>Close</Text>
+                </TouchableOpacity>
                 <WebView
                     scalesPageToFit
                     javaScriptEnabled
                     //source={{uri: this.state.modalUrl}}
-                    source={global.getHtml(this.state.modalUrl)}
+                    source={global.getHtml(this.state.serverUrl, this.state.modalUrl)}
                     onError={(event)=>{
-                      console.log('webview error ' + JSON.stringify(event, nul, 2));
+                      console.log('webview error '); // JSON.stringify(event, nul, 2));
                     }}
                     renderError={()=>{
                       console.log('webview renderError ');
@@ -114,9 +149,13 @@ export default class App extends React.Component {
     let self = this;
     setTimeout(function(){
       //console.warn('finish delay ' + t);
-      self.setState({
-        isReady: true
-      })
+      if (self.state.serverStatus != 0) {
+        self.setState({
+          isReady: true
+        })
+      } else {
+        self.delay(t);
+      }
     }, t);
   }
 
@@ -132,7 +171,8 @@ const styles = StyleSheet.create({
 
   header: {
     fontSize: 40,
-    color: "#F44A3E"
+    color: "#F44A3E",
+    textAlign: 'center'
   },
 
   list: {
@@ -152,6 +192,20 @@ const styles = StyleSheet.create({
   modalContent: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'red',
+    backgroundColor: 'black',
+  },
+
+  closeButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+
+  closeText: {
+    color: "yellow",
+    backgroundColor: "red",
+    fontSize: 20,
+    padding: 10
   }
 });
