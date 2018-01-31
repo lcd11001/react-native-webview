@@ -11,7 +11,7 @@
             react-native run-android
 
 2. Run with default iOS simulator
-   - list all iOS devices
+   - list all iOS devices:
             xcrun simctl list devices
-   - run with iPhone X
+   - run with iPhone X:
             react-native run-ios --simulator "iPhone X"
