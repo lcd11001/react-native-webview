@@ -152,6 +152,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-orientation')
     compile project(':react-native-static-server')
     compile project(':react-native-fs')
     compile fileTree(dir: "libs", include: ["*.jar"])

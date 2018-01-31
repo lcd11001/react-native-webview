@@ -16,6 +16,8 @@ import {
 import StaticServer from 'react-native-static-server';
 import RNFS from 'react-native-fs';
 
+import Orientation from 'react-native-orientation';
+
 import global from './src/common/global';
 import CatalogItem from './src/components/CatalogItem';
 
@@ -32,7 +34,8 @@ export default class App extends React.Component {
       modalVisible: false,
       modalUrl: '',
       serverStatus: 0, // -1: false, 0: not created, 1: success
-      serverUrl: ''
+      serverUrl: '',
+      app_orientation: 'unknown'
     }
 
 
@@ -70,6 +73,11 @@ export default class App extends React.Component {
   }
 
   componentWillMount() {
+    const initOrientation = Orientation.getInitialOrientation();
+    this.setState({
+      app_orientation: initOrientation
+    });
+
     this.delay(this.state.delaySplash);
   }
 
@@ -100,7 +108,7 @@ export default class App extends React.Component {
                 <CatalogItem
                   onSelected={()=>{
                     //console.log('you clicked ' + rowData.item.title);
-                    this.onModalOpen( rowData.item.path )
+                    this.onModalOpen( rowData.item.path, rowData.item.orientation );
                   }}
                   serverUrl={this.state.serverUrl}
                   {...rowData.item}
@@ -157,9 +165,15 @@ export default class App extends React.Component {
     );
   }
 
-  onModalOpen(url) {
-    console.log('onModalOpen');
+  onModalOpen(url, orientation) {
+    console.log('onModalOpen ' + orientation);
     StatusBar.setHidden(true);
+
+    if (orientation.indexOf('landscape') != -1) {
+      console.log('change to landscape');
+      Orientation.lockToLandscape();
+    }
+
     this.setState({
         modalVisible: true,
         modalUrl: url
@@ -168,10 +182,18 @@ export default class App extends React.Component {
 
   onModalClose() {
     console.log('onModalClose');
-    StatusBar.setHidden(false);
     this.setState({
         modalVisible: false
     })
+
+    StatusBar.setHidden(false);
+    
+    console.log('revert to ' + this.state.app_orientation)
+    if (this.state.app_orientation == 'PORTRAIT') {
+      Orientation.lockToPortrait();
+    } else {
+      console.log('*** your custom here ***');
+    }
   }
 
   delay(t) {
