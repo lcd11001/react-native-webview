@@ -9,7 +9,8 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
-  SafeAreaView
+  SafeAreaView,
+  Platform
 } from 'react-native';
 
 import StaticServer from 'react-native-static-server';
@@ -36,7 +37,7 @@ export default class App extends React.Component {
 
     // this.serverPath = RNFS.DocumentDirectoryPath + '/test';
     // path where files will be served from (index.html here)
-    this.serverPath = RNFS.MainBundlePath + '/test';
+    this.serverPath = (Platform.OS == 'ios' ? RNFS.MainBundlePath : RNFS.DocumentDirectoryPath) + '/test';
     console.log('server path: ' + this.serverPath);
 
     this.server = new StaticServer(0, this.serverPath, {localOnly : true });
