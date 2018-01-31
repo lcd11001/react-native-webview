@@ -29,6 +29,8 @@ export default class CatalogItem extends Component {
         );
       }
 
+      let imageComponent = null;
+
       return (
         <Image
             ref={(component) => imageComponent = component}
@@ -52,8 +54,6 @@ export default class CatalogItem extends Component {
             onSelected,
             serverUrl
         } = this.props;
-
-        let imageComponent = null;
 
         return (
             <TouchableOpacity
