@@ -16,6 +16,31 @@ export default class CatalogItem extends Component {
         AutoBind(this);
     }
 
+    renderThumbnail(serverUrl, thumbnail) {
+      if (Platform.OS == 'ios') {
+        return (
+          <View style={styles.thumbnailViewIOS}>
+            <Image
+                style={styles.thumbnailIOS}
+                source={ global.getThumbnail(serverUrl, thumbnail) }
+                defaultSource={ global.getDefaultThumbnail() }
+            />
+          </View>
+        );
+      }
+
+      return (
+        <Image
+            ref={(component) => imageComponent = component}
+            source={ global.getThumbnail(serverUrl, thumbnail) }
+            style={styles.thumbnail}
+            onError={ (e) => {
+                imageComponent.setNativeProps({ src: [{ uri: global.getDefaultThumbnailFromBase64() }] })
+            }}
+        />
+      );
+    }
+
     render() {
         const {
             title,
@@ -36,18 +61,10 @@ export default class CatalogItem extends Component {
                 onPress={onSelected}
             >
                 <View style={styles.item}>
-                    <Image
-                        ref={(component) => imageComponent = component}
-                        source={ global.getThumbnail(serverUrl, thumbnail) }
-                        defaultSource={ global.getDefaultThumbnail() }
-                        style={styles.thumbnail}
-                        onError={ (e) => {
-                            if (Platform.OS !== 'ios')
-                            {
-                                imageComponent.setNativeProps({ src: [{ uri: global.getDefaultThumbnailFromBase64() }] })
-                            }
-                        }}
-                    />
+                    {
+                        this.renderThumbnail(serverUrl, thumbnail)
+                    }
+
                     <View style={styles.detail}>
                         <Text style={styles.title}>{title}</Text>
                         <Text style={styles.description}>{description}</Text>
@@ -81,22 +98,35 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         padding: 10,
-        // backgroundColor: "blue"
+        //backgroundColor: "blue",
     },
 
     thumbnail: {
-        padding: 2,
+        padding: 0,
         flex: 1,
         //backgroundColor: "gray",
         width: "auto",
         height: "100%",
         resizeMode: "cover",
         borderTopLeftRadius: 20,
-        borderBottomLeftRadius: 20,
-        //overflow: "hidden",
-        // borderWidth: 2,
-        // borderColor: "#F00",
-        // borderRadius: 20
+        borderBottomLeftRadius: 20
+    },
+
+    thumbnailIOS: {
+        flex: 1,
+        //backgroundColor: "gray",
+        width: "auto",
+        height: "100%",
+        resizeMode: "cover",
+    },
+
+    thumbnailViewIOS: {
+      padding: 0,
+      flex: 1,
+      //backgroundColor: "gray",
+      borderTopLeftRadius: 20,
+      borderBottomLeftRadius: 20,
+      overflow: "hidden",
     },
 
     detail: {

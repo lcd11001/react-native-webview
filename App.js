@@ -1,5 +1,16 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, Modal, WebView, StatusBar, Image, TouchableOpacity } from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  Modal,
+  WebView,
+  StatusBar,
+  Image,
+  TouchableOpacity,
+  SafeAreaView
+} from 'react-native';
 
 import StaticServer from 'react-native-static-server';
 import RNFS from 'react-native-fs';
@@ -56,6 +67,7 @@ export default class App extends React.Component {
 
       return (
         <View style={styles.container}>
+          <SafeAreaView forceInset={{ top: 'always' }} style={{backgroundColor: 'red'}} />
           <Text style={styles.header}>Testing local webview</Text>
 
           <FlatList
