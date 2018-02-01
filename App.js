@@ -10,7 +10,8 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
-  Platform
+  Platform,
+  Dimensions
 } from 'react-native';
 
 import StaticServer from 'react-native-static-server';
@@ -33,9 +34,14 @@ export default class App extends React.Component {
       delaySplash: 2000, // miliseconds
       modalVisible: false,
       modalUrl: '',
+      modalRotateZ: '0deg',
+      modalTranslateX: 0,
+      modalTranslateY: 0,
+      modalWidth: '100%',
+      modalHeight: '100%',
       serverStatus: 0, // -1: false, 0: not created, 1: success
       serverUrl: '',
-      app_orientation: 'unknown'
+      appOrientation: 'unknown',
     }
 
 
@@ -75,7 +81,7 @@ export default class App extends React.Component {
   componentWillMount() {
     const initOrientation = Orientation.getInitialOrientation();
     this.setState({
-      app_orientation: initOrientation
+      appOrientation: initOrientation
     });
 
     this.delay(this.state.delaySplash);
@@ -142,7 +148,18 @@ export default class App extends React.Component {
             visible={this.state.modalVisible}
             onRequestClose={this.onModalClose}
         >
-            <View style={styles.modalContent}>
+            <View 
+              style={[
+                styles.modalContent, 
+                {transform: [
+                  {rotateZ: this.state.modalRotateZ}, 
+                  {translateX: this.state.modalTranslateX}, 
+                  {translateY: this.state.modalTranslateY}
+                ], 
+                width: this.state.modalWidth, 
+                height: this.state.modalHeight} 
+              ]}
+            >
                 <TouchableOpacity
                     onPress={this.onModalClose}
                     style={styles.closeButton}
@@ -171,14 +188,32 @@ export default class App extends React.Component {
     console.log('onModalOpen ' + orientation);
     StatusBar.setHidden(true);
 
-    if (orientation.indexOf('landscape') != -1) {
-      console.log('change to landscape');
+    var dimensions = Dimensions.get('window');
+    var width = '100%';
+    var height = '100%';
+    var deg = '0deg';
+    var x = 0;
+    var y = 0;
+    if (orientation.indexOf('force-landscape') != -1) {
+      console.log('change device to landscape');
       Orientation.lockToLandscape();
+    } else if (orientation.indexOf('landscape') != -1) {
+      console.log('change modal view to landscape');
+      deg = '90deg';
+      width = dimensions.height;
+      height = dimensions.width;
+      x = (width - dimensions.width) / 2;
+      y = -(height - dimensions.height) / 2;
     }
 
     this.setState({
         modalVisible: true,
-        modalUrl: url
+        modalUrl: url,
+        modalRotateZ: deg,
+        modalTranslateX: x,
+        modalTranslateY: y,
+        modalWidth: width,
+        modalHeight: height
     });
   }
 
@@ -190,12 +225,8 @@ export default class App extends React.Component {
 
     StatusBar.setHidden(false);
     
-    console.log('revert to ' + this.state.app_orientation)
-    if (this.state.app_orientation == 'PORTRAIT') {
-      Orientation.lockToPortrait();
-    } else {
-      console.log('*** your custom here ***');
-    }
+    console.log('revert to ' + this.state.appOrientation)
+    Orientation.lockToPortrait();
   }
 
   delay(t) {
@@ -245,9 +276,10 @@ const styles = StyleSheet.create({
   },
 
   modalContent: {
-    flex: 1,
+    // flex: 1,
+    flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: 'red',
   },
 
   closeButton: {
