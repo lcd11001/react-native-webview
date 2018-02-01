@@ -167,16 +167,30 @@ export default class App extends React.Component {
                       <Text style={styles.closeText}>Close</Text>
                 </TouchableOpacity>
                 <WebView
-                    scalesPageToFit
-                    javaScriptEnabled
+                    scalesPageToFit={true}
+                    javaScriptEnabled={true}
+                    allowsInlineMediaPlayback={true}
+                    mediaPlaybackRequiresUserAction={false}
                     style={styles.webview}
                     //source={{uri: this.state.modalUrl}}
                     source={global.getHtml(this.state.serverUrl, this.state.modalUrl)}
-                    onError={(event)=>{
-                      console.log('webview error '); // JSON.stringify(event, nul, 2));
+                    onError={(event) => {
+                      console.log('webview error ' + event.url);
                     }}
-                    renderError={()=>{
-                      console.log('webview renderError ');
+                    onMessage={(event) => {
+                      console.log('webview onMessage ' + event.nativeEvent.data);
+                    }}
+                    onShouldStartLoadWithRequest={(event) => {
+                      // for Android: pls check
+                      // https://github.com/cbrevik/webview-native-config-example
+                      console.log('webview onShouldStartLoadWithRequest ' + event.url);
+                      return true;
+                    }}
+                    onNavigationStateChange={(event) => {
+                      console.log('webview onNavigationStateChange ' + event.url);
+                    }}
+                    onLoadStart={(event) => {
+                      console.log('webview onLoadStart ' + event.url);
                     }}
                 />
             </View>
@@ -279,7 +293,7 @@ const styles = StyleSheet.create({
     // flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    backgroundColor: 'red',
+    backgroundColor: 'transparent',
   },
 
   closeButton: {
