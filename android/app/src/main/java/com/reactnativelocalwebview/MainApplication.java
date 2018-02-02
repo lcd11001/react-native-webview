@@ -3,7 +3,7 @@ package com.reactnativelocalwebview;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.react.native.rim.RNLibraryRimWebviewPackage;
+import com.reactnative.library.rim.RNLibraryRimWebviewPackage;
 import com.github.yamill.orientation.OrientationPackage;
 import com.futurepress.staticserver.FPStaticServerPackage;
 import com.rnfs.RNFSPackage;
