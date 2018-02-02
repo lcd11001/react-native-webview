@@ -40,6 +40,7 @@
 		8D337FBA210D483783A9E5A4 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D56A473D5B84CF9A71BE283 /* libRNFS.a */; };
 		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		C721A5BD7E6B4CFF8F4419BD /* libRCTOrientation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 64BFF5F2D7014C8FBF4460F5 /* libRCTOrientation.a */; };
+		1A5E0912AFC24E10BFDD8703 /* libRNLibraryRimWebview.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 826597E2BD9D44C0A006ECBF /* libRNLibraryRimWebview.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -357,6 +358,8 @@
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		C860ACC0AC1342CEADA3FBA8 /* RCTOrientation.xcodeproj */ = {isa = PBXFileReference; name = "RCTOrientation.xcodeproj"; path = "../node_modules/react-native-orientation/iOS/RCTOrientation.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		64BFF5F2D7014C8FBF4460F5 /* libRCTOrientation.a */ = {isa = PBXFileReference; name = "libRCTOrientation.a"; path = "libRCTOrientation.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		37976C9300E04B388A5832E5 /* RNLibraryRimWebview.xcodeproj */ = {isa = PBXFileReference; name = "RNLibraryRimWebview.xcodeproj"; path = "../_library/rim-webview/ios/RNLibraryRimWebview.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		826597E2BD9D44C0A006ECBF /* libRNLibraryRimWebview.a */ = {isa = PBXFileReference; name = "libRNLibraryRimWebview.a"; path = "libRNLibraryRimWebview.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -388,6 +391,7 @@
 				139FDEF61B0652A700C62182 /* libRCTWebSocket.a in Frameworks */,
 				8D337FBA210D483783A9E5A4 /* libRNFS.a in Frameworks */,
 				C721A5BD7E6B4CFF8F4419BD /* libRCTOrientation.a in Frameworks */,
+				1A5E0912AFC24E10BFDD8703 /* libRNLibraryRimWebview.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -598,6 +602,7 @@
 				139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */,
 				948211F912AB4F58B1F4E807 /* RNFS.xcodeproj */,
 				C860ACC0AC1342CEADA3FBA8 /* RCTOrientation.xcodeproj */,
+				37976C9300E04B388A5832E5 /* RNLibraryRimWebview.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1235,12 +1240,14 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\_library\rim-webview\ios",
 				);
 				INFOPLIST_FILE = ReactNativeLocalWebviewTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1262,12 +1269,14 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\_library\rim-webview\ios",
 				);
 				INFOPLIST_FILE = ReactNativeLocalWebviewTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1290,6 +1299,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\_library\rim-webview\ios",
 				);
 				INFOPLIST_FILE = ReactNativeLocalWebview/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1312,6 +1322,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\_library\rim-webview\ios",
 				);
 				INFOPLIST_FILE = ReactNativeLocalWebview/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1341,11 +1352,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\_library\rim-webview\ios",
 				);
 				INFOPLIST_FILE = "ReactNativeLocalWebview-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1377,11 +1390,13 @@
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
 					"$(SRCROOT)\..\node_modules\react-native-orientation\iOS\RCTOrientation/**",
+					"$(SRCROOT)\..\_library\rim-webview\ios",
 				);
 				INFOPLIST_FILE = "ReactNativeLocalWebview-tvOS/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
@@ -1414,6 +1429,7 @@
 					"$(inherited)",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "com.facebook.REACT.ReactNativeLocalWebview-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1438,6 +1454,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);

@@ -152,6 +152,7 @@ android {
 }
 
 dependencies {
+    compile project(':rim-webview')
     compile project(':react-native-orientation')
     compile project(':react-native-static-server')
     compile project(':react-native-fs')

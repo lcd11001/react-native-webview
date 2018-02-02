@@ -22,3 +22,6 @@
     - goto "App permissions"
     - goto "Storage"
     - switch slider to "enable" for your app
+    
+4. Create your own custom react-native library
+    https://www.npmjs.com/package/react-native-create-library
