@@ -19,6 +19,8 @@ import RNFS from 'react-native-fs';
 
 import Orientation from 'react-native-orientation';
 
+import RimWebview from './_library/rim-webview';
+
 import global from './src/common/global';
 import CatalogItem from './src/components/CatalogItem';
 
@@ -166,7 +168,8 @@ export default class App extends React.Component {
                 >
                       <Text style={styles.closeText}>Close</Text>
                 </TouchableOpacity>
-                <WebView
+                <RimWebview
+                    enableUrlPrefixes={['exit:', 'link:', 'expand:']}
                     scalesPageToFit={true}
                     javaScriptEnabled={true}
                     allowsInlineMediaPlayback={true}

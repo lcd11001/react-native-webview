@@ -25,3 +25,5 @@
     
 4. Create your own custom react-native library
     https://www.npmjs.com/package/react-native-create-library
+    https://medium.com/gbox-crew-blog/making-libraries-for-react-native-14a8f5006697
+    https://github.com/cbrevik/webview-native-config-example
