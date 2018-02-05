@@ -7,6 +7,9 @@ import android.webkit.WebView;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.ReadableMapKeySetIterator;
+import com.facebook.react.bridge.ReadableType;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -65,12 +68,65 @@ public class RimWebViewManager extends ReactWebViewManager {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             if (mEnableUrlPrefixes != null && mEnableUrlPrefixes.size() > 0) {
-                ArrayList<Object> urlPrefixes = mEnableUrlPrefixes.toArrayList();
-                for (Object urlPrefix : urlPrefixes) {
-                    if (url.startsWith((String) urlPrefix)) {
+                for (int i=0; i<mEnableUrlPrefixes.size(); i++) {
+                    boolean useCustomCheck = false;
+                    boolean bValue = false;
+                    String sValue = "";
+                    String key = "";
 
-                        dispatchEvent(view, new TopMessageEvent(view.getId(), url));
-                        return true;
+                    ReadableType prefixType = mEnableUrlPrefixes.getType(i);
+                    switch (prefixType) {
+                        case Map:
+                            useCustomCheck = true;
+                            
+                            ReadableMap readableMap = (ReadableMap)mEnableUrlPrefixes.getMap(i);
+                            ReadableMapKeySetIterator iterator = readableMap.keySetIterator();
+
+                            while (iterator.hasNextKey()) {
+                                key = iterator.nextKey();
+                                ReadableType type = readableMap.getType(key);
+                                
+                                switch (type) {
+                                    case Boolean:
+                                        bValue = readableMap.getBoolean(key);
+                                        Log.d(REACT_CLASS, "urlPrefix => key " + key + " bValue " + bValue);
+                                    break;
+
+                                    case String:
+                                        sValue = readableMap.getString(key);
+                                        Log.d(REACT_CLASS, "urlPrefix => key " + key + " sValue " + sValue);
+                                    break;
+
+                                    default:
+                                        Log.e(REACT_CLASS, "not support key " + key + " type " + type);
+                                    break;
+                                }
+                            };
+
+                        break;
+
+                        default:
+                            Log.e(REACT_CLASS, "not support urlPrefix " + mEnableUrlPrefixes.getDynamic(i));
+                        break;
+                    }
+
+                    if (useCustomCheck) {
+                        if (url.startsWith(key)) {
+                            dispatchEvent(view, new TopMessageEvent(view.getId(), url));
+                            
+                            String newUrl = url;
+                            if (sValue.compareToIgnoreCase("remove") == 0) {
+                                newUrl = url.replace(key, "");
+                                bValue = false;
+                                Log.d(REACT_CLASS, "urlPrefix => newUrl " + newUrl);
+                            }
+
+                            if (!bValue) {
+                                return super.shouldOverrideUrlLoading(view, newUrl);
+                            }
+
+                            return bValue;
+                        }
                     }
                 }
             }

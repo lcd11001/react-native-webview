@@ -26,7 +26,7 @@ export default class RimWebView extends Component {
 
 RimWebView.propTypes = {
     ...WebView.propTypes,
-    enableUrlPrefixes: PropTypes.arrayOf(PropTypes.string)
+    enableUrlPrefixes: PropTypes.arrayOf(PropTypes.object)
 }
 
 RimWebView.defaultProps = {

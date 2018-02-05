@@ -162,14 +162,19 @@ export default class App extends React.Component {
                 height: this.state.modalHeight} 
               ]}
             >
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={this.onModalClose}
                     style={styles.closeButton}
                 >
                       <Text style={styles.closeText}>Close</Text>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <RimWebview
-                    enableUrlPrefixes={['exit:', 'link:', 'expand:']}
+                    urlPrefixesForDefaultIntent={['http://', 'https://']}
+                    enableUrlPrefixes={[
+                      {'exit:': true}, 
+                      {'link:': 'remove'}, 
+                      {'expand:': true}
+                    ]}
                     scalesPageToFit={true}
                     javaScriptEnabled={true}
                     allowsInlineMediaPlayback={true}
@@ -181,7 +186,12 @@ export default class App extends React.Component {
                       console.log('webview error ' + event.url);
                     }}
                     onMessage={(event) => {
-                      console.log('webview onMessage ' + event.nativeEvent.data);
+                      let data = event.nativeEvent.data;
+                      console.log('webview onMessage ' + data);
+                      
+                      if (data === 'exit:') {
+                        this.onModalClose();
+                      }
                     }}
                     onShouldStartLoadWithRequest={(event) => {
                       // for Android: pls check
