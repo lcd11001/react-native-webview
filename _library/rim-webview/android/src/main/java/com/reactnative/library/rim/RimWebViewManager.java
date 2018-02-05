@@ -1,6 +1,8 @@
 
 package com.reactnative.library.rim;
 
+import android.os.Build;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.webkit.WebView;
 
@@ -10,6 +12,7 @@ import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.ReadableMapKeySetIterator;
 import com.facebook.react.bridge.ReadableType;
+import com.facebook.react.common.build.ReactBuildConfig;
 import com.facebook.react.module.annotations.ReactModule;
 import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
@@ -131,7 +134,17 @@ public class RimWebViewManager extends ReactWebViewManager {
                 }
             }
 
+            Log.d(REACT_CLASS, "super check " + url);
             return super.shouldOverrideUrlLoading(view, url);
+        }
+
+        @Override
+        public void onPageStarted(WebView webView, String url, Bitmap favicon) {
+            super.onPageStarted(webView, url, favicon);
+
+            if (ReactBuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                WebView.setWebContentsDebuggingEnabled(true);
+            }
         }
 
         public void setEnableUrlPrefixes(@Nullable ReadableArray urlPrefixes) {
@@ -147,6 +160,22 @@ public class RimWebViewManager extends ReactWebViewManager {
     protected static class RimWebView extends ReactWebView {
         public RimWebView(ThemedReactContext reactContext) {
             super(reactContext);
+        }
+
+        @Override
+        public void onHostResume() {
+            super.onHostResume();
+            loadUrl("javascript:onGameResume();");
+            loadUrl("javascript:onResumeActive();");
+            loadUrl("javascript:onResume();");
+        }
+
+        @Override
+        public void onHostPause() {
+            super.onHostPause();
+            loadUrl("javascript:onGamePause();");
+            loadUrl("javascript:onPauseActive();");
+            loadUrl("javascript:onPause();");
         }
     }
 }

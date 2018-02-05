@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Platform,
-  Dimensions
+  Dimensions,
+  Linking
 } from 'react-native';
 
 import StaticServer from 'react-native-static-server';
@@ -34,14 +35,17 @@ export default class App extends React.Component {
     this.state = {
       isReady: false,
       delaySplash: 2000, // miliseconds
+      
       modalVisible: false,
       modalUrl: '',
+      modalCanOpenUrl: true,
       modalRotateZ: '0deg',
       modalTranslateX: 0,
       modalTranslateY: 0,
       modalWidth: '100%',
       modalHeight: '100%',
       modalStyle: {},
+
       serverStatus: 0, // -1: false, 0: not created, 1: success
       serverUrl: '',
       appOrientation: 'unknown',
@@ -149,7 +153,10 @@ export default class App extends React.Component {
 
     var modalStyle = this.snapView(this.state.modalStyle);
     console.log('renderModal ' + JSON.stringify(modalStyle, null, 2));
-    
+
+    let rimWebView = null;
+    let expandableView = null;
+
     return (
         // <Modal
         //     style={styles.modal}
@@ -159,6 +166,7 @@ export default class App extends React.Component {
         //     onRequestClose={this.onModalClose}
         // >
             <View 
+              ref={ (com) => expandableView = com }
               style={[
                 styles.modal,
                 styles.modalContent, 
@@ -181,11 +189,12 @@ export default class App extends React.Component {
                       <Text style={styles.closeText}>Close</Text>
                 </TouchableOpacity> */}
                 <RimWebview
+                    ref={ (com) => rimWebView = com }
                     urlPrefixesForDefaultIntent={['http://', 'https://']}
                     enableUrlPrefixes={[
+                      {'expand:': true},
                       {'exit:': true}, 
-                      {'link:': 'remove'}, 
-                      {'expand:': true}
+                      {'link:': true}
                     ]}
                     scalesPageToFit={true}
                     javaScriptEnabled={true}
@@ -204,14 +213,10 @@ export default class App extends React.Component {
                       if (data === 'exit:') {
                         this.onModalClose();
                       } else if (data === 'expand:') {
-                        let {deg, width, height, x, y} = this.rotateView('landscape');
-                        this.setState({
-                            modalRotateZ: deg,
-                            modalTranslateX: x,
-                            modalTranslateY: y,
-                            modalWidth: width,
-                            modalHeight: height
-                        });
+                        this.onModalExpand();
+                      } else if (data.indexOf('link:') !== -1) {
+                        let url = data.replace('link:', '');
+                        this.onModalOpenUrl(url);
                       }
                     }}
                     onShouldStartLoadWithRequest={(event) => {
@@ -342,13 +347,45 @@ export default class App extends React.Component {
     console.log('onModalClose');
     this.setState({
         modalVisible: false,
-        modalStyle: {}
+        modalStyle: {},
+        modalCanOpenUrl: true
     })
 
     StatusBar.setHidden(false);
     
     console.log('revert to ' + this.state.appOrientation)
     Orientation.lockToPortrait();
+  }
+
+  onModalExpand() {
+    let {deg, width, height, x, y} = this.rotateView('landscape');
+    this.setState({
+        modalRotateZ: deg,
+        modalTranslateX: x,
+        modalTranslateY: y,
+        modalWidth: width,
+        modalHeight: height,
+        modalStyle: {},
+        modalCanOpenUrl: false
+    });
+  }
+
+  onModalOpenUrl(url) {
+    Linking.canOpenURL(url).then( (supported) => {
+      if (supported) {
+        if (this.state.modalCanOpenUrl) {
+          Linking.openURL(url);
+        } else {
+          // fix: VBAN open URL when expanding webview
+          this.setState({
+            modalCanOpenUrl: true
+          })
+        }
+        
+      } else {
+        console.log("Don't know how to open URI " + url);
+      }
+    });
   }
 
   delay(t) {
