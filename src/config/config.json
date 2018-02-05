@@ -7,7 +7,13 @@
             "thumbnail": "cocacola.jpg",
             "orientation": "portrait",
             "type": "VBAN",
-            "path": "coca"
+            "path": "coca",
+            "style": {
+                "position": "absolute", 
+                "width": 320,
+                "height": 50,
+                "snap": "bottom"
+            }
         },
 
         {

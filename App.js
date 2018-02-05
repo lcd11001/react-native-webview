@@ -41,6 +41,7 @@ export default class App extends React.Component {
       modalTranslateY: 0,
       modalWidth: '100%',
       modalHeight: '100%',
+      modalStyle: {},
       serverStatus: 0, // -1: false, 0: not created, 1: success
       serverUrl: '',
       appOrientation: 'unknown',
@@ -141,7 +142,10 @@ export default class App extends React.Component {
     );
   }
 
-  renderModal() {
+  renderModal(item) {
+    var modalStyle = this.snapView(this.state.modalStyle);
+    console.log('renderModal ' + JSON.stringify(modalStyle, null, 2));
+    
     return (
         <Modal
             style={styles.modal}
@@ -153,13 +157,16 @@ export default class App extends React.Component {
             <View 
               style={[
                 styles.modalContent, 
-                {transform: [
-                  {rotateZ: this.state.modalRotateZ}, 
-                  {translateX: this.state.modalTranslateX}, 
-                  {translateY: this.state.modalTranslateY}
-                ], 
-                width: this.state.modalWidth, 
-                height: this.state.modalHeight} 
+                {
+                  transform: [
+                    {rotateZ: this.state.modalRotateZ}, 
+                    {translateX: this.state.modalTranslateX}, 
+                    {translateY: this.state.modalTranslateY}
+                  ], 
+                  width: this.state.modalWidth, 
+                  height: this.state.modalHeight
+                } ,
+                modalStyle
               ]}
             >
                 {/* <TouchableOpacity
@@ -250,9 +257,59 @@ export default class App extends React.Component {
     });
   }
 
+  snapView(style) {
+    if (!style.hasOwnProperty("snap"))
+    {
+      return style;
+    }
+
+    var dimensions = Dimensions.get('window');
+    var toEdge = style.snap;
+
+    var snapStyle = {
+      position: style.position || 'relative',
+      width: style.width || dimensions.width,
+      height: style.height || dimensions.height,
+      left: 0,
+      top: 0
+    };
+
+    switch (toEdge) {
+      case 'top':
+        snapStyle.top = 0;
+        snapStyle.left = (dimensions.width - snapStyle.width) / 2;
+      break;
+
+      case 'bottom':
+        snapStyle.top = dimensions.height - snapStyle.height;
+        snapStyle.left = (dimensions.width - snapStyle.width) / 2;
+      break;
+
+      case 'left':
+        snapStyle.top = (dimensions.height - snapStyle.height) / 2;
+        snapStyle.left = 0;
+      break;
+
+      case 'right':
+        snapStyle.top = (dimensions.height - snapStyle.height) / 2;
+        snapStyle.left = dimensions.width - snapStyle.width;
+      break;
+
+      default:
+        console.warn('[TODO] snapView ' + snapEdge);
+      break;
+    }
+
+    return snapStyle;
+  }
+
   onModalOpen(item) {
     let url = item.path; 
     let orientation = item.orientation;
+    let style = {};
+    if (item.hasOwnProperty("style")) {
+      style = item.style;
+    }
 
     console.log('onModalOpen ' + orientation);
     StatusBar.setHidden(true);
@@ -271,14 +328,16 @@ export default class App extends React.Component {
         modalTranslateX: x,
         modalTranslateY: y,
         modalWidth: width,
-        modalHeight: height
+        modalHeight: height,
+        modalStyle: style
     });
   }
 
   onModalClose() {
     console.log('onModalClose');
     this.setState({
-        modalVisible: false
+        modalVisible: false,
+        modalStyle: {}
     })
 
     StatusBar.setHidden(false);
