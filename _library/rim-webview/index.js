@@ -33,4 +33,4 @@ RimWebView.defaultProps = {
     enableUrlPrefixes: []
 }
 
-const CustomWebView = requireNativeComponent('CustomWebView', RimWebView, null);
+const CustomWebView = requireNativeComponent('RimWebView', RimWebView, WebView.extraNativeComponentConfig);
