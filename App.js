@@ -143,19 +143,24 @@ export default class App extends React.Component {
   }
 
   renderModal(item) {
+    if (this.state.modalVisible == false) {
+      return null;
+    }
+
     var modalStyle = this.snapView(this.state.modalStyle);
     console.log('renderModal ' + JSON.stringify(modalStyle, null, 2));
     
     return (
-        <Modal
-            style={styles.modal}
-            transparent={true}
-            animationType="slide"
-            visible={this.state.modalVisible}
-            onRequestClose={this.onModalClose}
-        >
+        // <Modal
+        //     style={styles.modal}
+        //     transparent={true}
+        //     animationType="slide"
+        //     visible={this.state.modalVisible}
+        //     onRequestClose={this.onModalClose}
+        // >
             <View 
               style={[
+                styles.modal,
                 styles.modalContent, 
                 {
                   transform: [
@@ -223,7 +228,7 @@ export default class App extends React.Component {
                     }}
                 />
             </View>
-        </Modal>
+        // </Modal>
     );
   }
 
@@ -384,7 +389,7 @@ const styles = StyleSheet.create({
   },
 
   modal: {
-    //backgroundColor: 'blue',
+    backgroundColor: 'transparent',
     position: 'absolute',
     bottom: 0,
     left: 0,
