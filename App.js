@@ -116,7 +116,7 @@ export default class App extends React.Component {
                 <CatalogItem
                   onSelected={()=>{
                     //console.log('you clicked ' + rowData.item.title);
-                    this.onModalOpen( rowData.item.path, rowData.item.orientation );
+                    this.onModalOpen( rowData.item );
                   }}
                   serverUrl={this.state.serverUrl}
                   {...rowData.item}
@@ -211,13 +211,16 @@ export default class App extends React.Component {
     );
   }
 
-  onModalOpen(url, orientation) {
+  onModalOpen(item) {
+    let url = item.path; 
+    let orientation = item.orientation;
+
     console.log('onModalOpen ' + orientation);
     StatusBar.setHidden(true);
 
     var dimensions = Dimensions.get('window');
-    var width = '100%';
-    var height = '100%';
+    var width = dimensions.width;
+    var height = dimensions.height;
     var deg = '0deg';
     var x = 0;
     var y = 0;
