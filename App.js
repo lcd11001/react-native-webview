@@ -191,6 +191,15 @@ export default class App extends React.Component {
                       
                       if (data === 'exit:') {
                         this.onModalClose();
+                      } else if (data === 'expand:') {
+                        let {deg, width, height, x, y} = this.rotateView('landscape');
+                        this.setState({
+                            modalRotateZ: deg,
+                            modalTranslateX: x,
+                            modalTranslateY: y,
+                            modalWidth: width,
+                            modalHeight: height
+                        });
                       }
                     }}
                     onShouldStartLoadWithRequest={(event) => {
@@ -211,6 +220,36 @@ export default class App extends React.Component {
     );
   }
 
+  rotateView(orientation) {
+    var dimensions = Dimensions.get('window');
+
+    var width = dimensions.width;
+    var height = dimensions.height;
+    var deg = '0deg';
+    var x = 0;
+    var y = 0;
+
+    if (orientation.indexOf('force-landscape') != -1) {
+      width = dimensions.height;
+      height = dimensions.width;
+    }
+    else if (orientation.indexOf('landscape') != -1) {
+      deg = '90deg';
+      width = dimensions.height;
+      height = dimensions.width;
+      x = (width - dimensions.width) / 2;
+      y = -(height - dimensions.height) / 2;
+    }
+
+    return ({
+      deg: deg,
+      width: width,
+      height: height,
+      x: x,
+      y: y
+    });
+  }
+
   onModalOpen(item) {
     let url = item.path; 
     let orientation = item.orientation;
@@ -218,22 +257,11 @@ export default class App extends React.Component {
     console.log('onModalOpen ' + orientation);
     StatusBar.setHidden(true);
 
-    var dimensions = Dimensions.get('window');
-    var width = dimensions.width;
-    var height = dimensions.height;
-    var deg = '0deg';
-    var x = 0;
-    var y = 0;
+    let {deg, width, height, x, y} = this.rotateView(orientation);
+
     if (orientation.indexOf('force-landscape') != -1) {
       console.log('change device to landscape');
       Orientation.lockToLandscape();
-    } else if (orientation.indexOf('landscape') != -1) {
-      console.log('change modal view to landscape');
-      deg = '90deg';
-      width = dimensions.height;
-      height = dimensions.width;
-      x = (width - dimensions.width) / 2;
-      y = -(height - dimensions.height) / 2;
     }
 
     this.setState({
