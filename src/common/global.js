@@ -25,9 +25,11 @@ export default class global {
         let fullPath = server + '/catalogs/' + path + '/index.html' + (timeStamp !== undefined ? '?t=' + timeStamp : '');
         // console.log('getHtml ' + fullPath);
         return {uri: fullPath};
-        
-        // var defaultHtml = require('../../data/_default/html/index.json');
-        // return {html: defaultHtml.html};
+    }
+
+    static getDefaultHtml() {
+        var defaultHtml = require('../../data/_default/html/index.json');
+        return {html: defaultHtml.html};
     }
 
     static getThumbnail (server, file) {

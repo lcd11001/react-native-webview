@@ -26,6 +26,7 @@ import RimWebview from './_library/rim-webview';
 
 import global, { AppWidth, AppHeight } from './src/common/global';
 import CatalogItem from './src/components/CatalogItem';
+import ModalWebView from './src/components/ModalWebView';
 
 const AutoBind = require('auto-bind');
 
@@ -167,93 +168,48 @@ export default class App extends React.Component {
   }
 
   renderModal(item) {
-    if (this.state.modalVisible == false) {
-      return null;
-    }
-
-    var modalStyle = this.snapView(this.state.modalStyle);
-    // console.log('renderModal ' + JSON.stringify(modalStyle, null, 2));
-
-    let rimWebView = null;
-    let expandableView = null;
+    var modalSnapStyle = this.snapView(this.state.modalStyle);
 
     return (
-        // <Modal
-        //     style={styles.modal}
-        //     transparent={true}
-        //     animationType="slide"
-        //     visible={this.state.modalVisible}
-        //     onRequestClose={this.onModalClose}
-        // >
-            <View 
-              ref={ (com) => expandableView = com }
-              style={[
-                styles.modal,
-                styles.modalContent, 
-                {
-                  transform: [
-                    {rotateZ: this.state.modalRotateZ}, 
-                    {translateX: this.state.modalTranslateX}, 
-                    {translateY: this.state.modalTranslateY}
-                  ], 
-                  width: this.state.modalWidth, 
-                  height: this.state.modalHeight
-                } ,
-                modalStyle
-              ]}
-            >
-                {/* <TouchableOpacity
-                    onPress={this.onModalClose}
-                    style={styles.closeButton}
-                >
-                      <Text style={styles.closeText}>Close</Text>
-                </TouchableOpacity> */}
-                <RimWebview
-                    ref={ (com) => rimWebView = com }
-                    urlPrefixesForDefaultIntent={['http://', 'https://']}
-                    enableUrlPrefixes={[
-                      {'expand:': true},
-                      {'exit:': true}, 
-                      {'link:': true}
-                    ]}
-                    scalesPageToFit={true}
-                    javaScriptEnabled={true}
-                    allowsInlineMediaPlayback={true}
-                    mediaPlaybackRequiresUserAction={false}
-                    style={styles.webview}
-                    //source={{uri: this.state.modalUrl}}
-                    source={global.getHtml(this.state.serverUrl, this.state.modalUrl)}
-                    onError={(event) => {
-                      console.log('webview error ' + event.url);
-                    }}
-                    onMessage={(event) => {
-                      let data = event.nativeEvent.data;
-                      console.log('webview onMessage ' + data);
-                      
-                      if (data === 'exit:') {
-                        this.onModalClose();
-                      } else if (data === 'expand:') {
-                        this.onModalExpand();
-                      } else if (data.indexOf('link:') !== -1) {
-                        let url = data.replace('link:', '');
-                        this.onModalOpenUrl(url);
-                      }
-                    }}
-                    onShouldStartLoadWithRequest={(event) => {
-                      // for Android: pls check
-                      // https://github.com/cbrevik/webview-native-config-example
-                      console.log('webview onShouldStartLoadWithRequest ' + event.url);
-                      return true;
-                    }}
-                    onNavigationStateChange={(event) => {
-                      console.log('webview onNavigationStateChange ' + event.url);
-                    }}
-                    onLoadStart={(event) => {
-                      console.log('webview onLoadStart ' + event.url);
-                    }}
-                />
-            </View>
-        // </Modal>
+      <ModalWebView
+        modalVisible={this.state.modalVisible}
+        modalUrl={global.getHtml(this.state.serverUrl, this.state.modalUrl)}
+        
+        modalViewStyle={[
+          styles.modal, 
+          styles.modalContent,
+          modalSnapStyle
+        ]}
+        modalWebViewStyle={styles.webview}
+
+        modalUrlPrefixesForDefaultIntent={['http://', 'https://']}
+        modalEnableUrlPrefixes={[
+          {'expand:': true},
+          {'exit:': true}, 
+          {'link:': true}
+        ]}
+
+        modalRotateZ={this.state.modalRotateZ}
+        modalTranslateX={this.state.modalTranslateX}
+        modalTranslateY={this.state.modalTranslateY}
+
+        modalWidth={this.state.modalWidth}
+        modalHeight={this.state.modalHeight}
+
+        onModalMessage={(event) => {
+          let data = event.nativeEvent.data;
+          console.log('onModalMessage ' + data);
+          
+          if (data === 'exit:') {
+            this.onModalClose();
+          } else if (data === 'expand:') {
+            this.onModalExpand();
+          } else if (data.indexOf('link:') !== -1) {
+            let url = data.replace('link:', '');
+            this.onModalOpenUrl(url);
+          }
+        }}
+      />
     );
   }
 
