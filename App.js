@@ -166,7 +166,7 @@ export default class App extends React.Component {
     }
 
     var modalStyle = this.snapView(this.state.modalStyle);
-    console.log('renderModal ' + JSON.stringify(modalStyle, null, 2));
+    // console.log('renderModal ' + JSON.stringify(modalStyle, null, 2));
 
     let rimWebView = null;
     let expandableView = null;

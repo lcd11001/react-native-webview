@@ -23,7 +23,7 @@ export default class global {
     static getHtml(server, path, timeStamp) {
         // console.log('timeStamp ' + timeStamp);
         let fullPath = server + '/catalogs/' + path + '/index.html' + (timeStamp !== undefined ? '?t=' + timeStamp : '');
-        console.log('getHtml ' + fullPath);
+        // console.log('getHtml ' + fullPath);
         return {uri: fullPath};
         
         // var defaultHtml = require('../../data/_default/html/index.json');
@@ -32,7 +32,7 @@ export default class global {
 
     static getThumbnail (server, file) {
         let fullPath = server + "/thumbnails/" + file;
-        console.log('getThumbnail ' + fullPath);
+        // console.log('getThumbnail ' + fullPath);
         return {uri: fullPath};
 
         // return {uri: './unknown.jpg'};

@@ -92,12 +92,12 @@ public class RimWebViewManager extends ReactWebViewManager {
                                 switch (type) {
                                     case Boolean:
                                         bValue = readableMap.getBoolean(key);
-                                        Log.d(REACT_CLASS, "urlPrefix => key " + key + " bValue " + bValue);
+                                        // Log.d(REACT_CLASS, "urlPrefix => key " + key + " bValue " + bValue);
                                     break;
 
                                     case String:
                                         sValue = readableMap.getString(key);
-                                        Log.d(REACT_CLASS, "urlPrefix => key " + key + " sValue " + sValue);
+                                        // Log.d(REACT_CLASS, "urlPrefix => key " + key + " sValue " + sValue);
                                     break;
 
                                     default:
@@ -121,7 +121,7 @@ public class RimWebViewManager extends ReactWebViewManager {
                             if (sValue.compareToIgnoreCase("remove") == 0) {
                                 newUrl = url.replace(key, "");
                                 bValue = false;
-                                Log.d(REACT_CLASS, "urlPrefix => newUrl " + newUrl);
+                                // Log.d(REACT_CLASS, "urlPrefix => newUrl " + newUrl);
                             }
 
                             if (!bValue) {
