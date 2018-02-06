@@ -12,7 +12,9 @@ import {
   SafeAreaView,
   Platform,
   Dimensions,
-  Linking
+  Linking,
+  BackHandler,
+  Alert
 } from 'react-native';
 
 import StaticServer from 'react-native-static-server';
@@ -49,6 +51,8 @@ export default class App extends React.Component {
       serverStatus: 0, // -1: false, 0: not created, 1: success
       serverUrl: '',
       appOrientation: 'unknown',
+
+      isShowingExitDialog: false
     }
 
 
@@ -83,6 +87,8 @@ export default class App extends React.Component {
         serverUrl: url
       })
     });
+
+    BackHandler.addEventListener('hardwareBackPress', this.handlerBackButton);
   }
 
   componentWillMount() {
@@ -414,6 +420,57 @@ export default class App extends React.Component {
         self.delay(t);
       }
     }, t);
+  }
+
+  handlerBackButton() {
+    if (this.state.modalVisible) {
+      this.setState({
+        modalVisible: false
+      })
+
+      return true;
+    }
+    // console.log('handlerBackButton');
+    if (!this.state.isShowingExitDialog) {
+      this.showExitAppWarningDialog();
+    }
+    return true;
+  }
+
+  showExitAppWarningDialog() {
+    // console.log('showExitAppWarningDialog');
+    this.setState({
+      isShowingExitDialog: true
+    });
+
+    Alert.alert(
+      'Confirmation',
+      'Would you like to exit the app?',
+      [
+        {
+          text: 'Cancel', 
+          onPress: () => { 
+            // console.log('cancel clicked');
+            this.setState({
+              isShowingExitDialog: false
+            });
+          },
+          style: 'cancel'
+        },
+        {
+          text: 'OK',
+          onPress: () => { 
+            // console.log('OK clicked'); 
+            this.server.kill();
+            BackHandler.exitApp(); 
+          }
+        }
+      ],
+      {
+        cancelable: false
+      }
+    );
+
   }
 
 }
