@@ -22,7 +22,7 @@ import Orientation from 'react-native-orientation';
 
 import RimWebview from './_library/rim-webview';
 
-import global from './src/common/global';
+import global, { AppWidth, AppHeight } from './src/common/global';
 import CatalogItem from './src/components/CatalogItem';
 
 const AutoBind = require('auto-bind');
@@ -38,7 +38,7 @@ export default class App extends React.Component {
       
       modalVisible: false,
       modalUrl: '',
-      modalCanOpenUrl: true,
+      modalCanOpenUrl: false,
       modalRotateZ: '0deg',
       modalTranslateX: 0,
       modalTranslateY: 0,
@@ -100,7 +100,14 @@ export default class App extends React.Component {
       if (this.state.serverStatus == -1) {
         return (
           <View style={[styles.container, {justifyContent: 'center'}]}>
-            <Text style={styles.header}>Fail to create local server</Text>
+            <Text 
+              style={styles.header}
+              adjustsFontSizeToFit={false} // use global.getFontSize instead
+              allowFontScaling={false}
+              numberOfLines={1}
+            >
+              Fail to create local server
+            </Text>
           </View>
         );
       }
@@ -108,7 +115,14 @@ export default class App extends React.Component {
       return (
         <View style={styles.container}>
           <SafeAreaView forceInset={{ top: 'always' }} style={{backgroundColor: 'red'}} />
-          <Text style={styles.header}>Testing local webview</Text>
+          <Text 
+            style={styles.header}
+            adjustsFontSizeToFit={false} // use global.getFontSize instead
+            allowFontScaling={false}
+            numberOfLines={1}
+          >
+            Testing local webview
+          </Text>
 
           <FlatList
             style={styles.list}
@@ -238,24 +252,22 @@ export default class App extends React.Component {
   }
 
   rotateView(orientation) {
-    var dimensions = Dimensions.get('window');
-
-    var width = dimensions.width;
-    var height = dimensions.height;
+    var width = AppWidth;
+    var height = AppHeight;
     var deg = '0deg';
     var x = 0;
     var y = 0;
 
     if (orientation.indexOf('force-landscape') != -1) {
-      width = dimensions.height;
-      height = dimensions.width;
+      width = AppHeight;
+      height = AppWidth;
     }
     else if (orientation.indexOf('landscape') != -1) {
       deg = '90deg';
-      width = dimensions.height;
-      height = dimensions.width;
-      x = (width - dimensions.width) / 2;
-      y = -(height - dimensions.height) / 2;
+      width = AppHeight;
+      height = AppWidth;
+      x = (width - AppWidth) / 2;
+      y = -(height - AppHeight) / 2;
     }
 
     return ({
@@ -273,13 +285,11 @@ export default class App extends React.Component {
       return style;
     }
 
-    var dimensions = Dimensions.get('window');
     var toEdge = style.snap;
-
     var snapStyle = {
       position: style.position || 'relative',
-      width: style.width || dimensions.width,
-      height: style.height || dimensions.height,
+      width: style.width || AppWidth,
+      height: style.height || AppHeight,
       left: 0,
       top: 0
     };
@@ -287,22 +297,22 @@ export default class App extends React.Component {
     switch (toEdge) {
       case 'top':
         snapStyle.top = 0;
-        snapStyle.left = (dimensions.width - snapStyle.width) / 2;
+        snapStyle.left = (AppWidth - snapStyle.width) / 2;
       break;
 
       case 'bottom':
-        snapStyle.top = dimensions.height - snapStyle.height;
-        snapStyle.left = (dimensions.width - snapStyle.width) / 2;
+        snapStyle.top = AppHeight - snapStyle.height;
+        snapStyle.left = (AppWidth - snapStyle.width) / 2;
       break;
 
       case 'left':
-        snapStyle.top = (dimensions.height - snapStyle.height) / 2;
+        snapStyle.top = (AppHeight - snapStyle.height) / 2;
         snapStyle.left = 0;
       break;
 
       case 'right':
-        snapStyle.top = (dimensions.height - snapStyle.height) / 2;
-        snapStyle.left = dimensions.width - snapStyle.width;
+        snapStyle.top = (AppHeight - snapStyle.height) / 2;
+        snapStyle.left = AppWidth - snapStyle.width;
       break;
 
       default:
@@ -339,7 +349,8 @@ export default class App extends React.Component {
         modalTranslateY: y,
         modalWidth: width,
         modalHeight: height,
-        modalStyle: style
+        modalStyle: style,
+        modalCanOpenUrl: item.type !== 'VBAN'
     });
   }
 
@@ -348,7 +359,7 @@ export default class App extends React.Component {
     this.setState({
         modalVisible: false,
         modalStyle: {},
-        modalCanOpenUrl: true
+        modalCanOpenUrl: false
     })
 
     StatusBar.setHidden(false);
@@ -366,7 +377,6 @@ export default class App extends React.Component {
         modalWidth: width,
         modalHeight: height,
         modalStyle: {},
-        modalCanOpenUrl: false
     });
   }
 
@@ -376,10 +386,12 @@ export default class App extends React.Component {
         if (this.state.modalCanOpenUrl) {
           Linking.openURL(url);
         } else {
-          // fix: VBAN open URL when expanding webview
+          this.onModalExpand();
+          // Fixed: VBAN auto open link
+          // console.log('VBAN expanded');
           this.setState({
             modalCanOpenUrl: true
-          })
+          });
         }
         
       } else {
@@ -409,15 +421,19 @@ export default class App extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexWrap: 'wrap',
+    flexDirection: 'column',
     backgroundColor: '#FCE5BD',
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
 
   header: {
-    fontSize: 40,
+    fontSize: global.getFontSize(35),
     color: "#F44A3E",
-    textAlign: 'center'
+    textAlign: 'center',
+    textAlignVertical: "center",
+    marginHorizontal: 2
   },
 
   list: {
@@ -452,7 +468,7 @@ const styles = StyleSheet.create({
   closeText: {
     color: 'yellow',
     backgroundColor: 'red',
-    fontSize: 20,
+    fontSize: global.getFontSize(20),
     padding: 10
   },
 

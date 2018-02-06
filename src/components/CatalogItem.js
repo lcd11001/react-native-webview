@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 
-import global from '../common/global';
+import global, { AppWidth, AppHeight } from '../common/global';
 
 const AutoBind = require('auto-bind');
 
@@ -139,12 +139,12 @@ const styles = StyleSheet.create({
     },
 
     title: {
-        fontSize: 20,
+        fontSize: global.getFontSize(20),
         color: "#020242"
     },
 
     description: {
-        fontSize: 15,
+        fontSize: global.getFontSize(15),
         color: "#382FFF"
     }
 });

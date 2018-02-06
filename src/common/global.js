@@ -1,78 +1,41 @@
+import {
+    Dimensions,
+} from 'react-native';
+
+export const AppWidth = Dimensions.get('window').width;
+export const AppHeight = Dimensions.get('window').height;
+
 export default class global {
+
+    static getFontSize(size) {
+        if ( AppHeight / AppWidth < 2) {
+            return size * AppHeight / 660;
+        }
+        
+        return size * AppHeight * 0.8 / 660;
+    }
+
     static getCatalogs () {
         var json = require('../config/config.json');
         return json.catalogs;
     }
 
-    static getHtml(server, path) {
-        if (true) {
-          let fullPath = server + '/catalogs/' + path + '/index.html';
-          console.log('getHtml ' + fullPath);
-          return {uri: fullPath};
-        }
-        // https://stackoverflow.com/questions/42851296/react-native-load-local-html-file-into-webview
-        switch(path)
-        {
-            case 'coca':
-                return require('../../test/catalogs/coca/index.html');
-
-            case 'coco':
-                return require('../../test/catalogs/coco/index.html');
-
-            case 'fifa18':
-                return require('../../test/catalogs/fifa18/index.html');
-
-            case 'hot_nuts':
-                return require('../../test/catalogs/hot_nuts/index.html');
-
-            case 'kite_surfing':
-                return require('../../test/catalogs/kite_surfing/index.html');
-
-            case 'samsung_tle':
-                return require('../../test/catalogs/samsung_tle/index.html');
-
-            case 'xmen_apo_magneto_en':
-                return require('../../test/catalogs/xmen_apo_magneto_en/index.html');
-        }
-
-        var defaultHtml = require('../../data/_default/html/index.json');
-        return {html: defaultHtml.html};
+    static getHtml(server, path, timeStamp) {
+        // console.log('timeStamp ' + timeStamp);
+        let fullPath = server + '/catalogs/' + path + '/index.html' + (timeStamp !== undefined ? '?t=' + timeStamp : '');
+        console.log('getHtml ' + fullPath);
+        return {uri: fullPath};
+        
+        // var defaultHtml = require('../../data/_default/html/index.json');
+        // return {html: defaultHtml.html};
     }
 
     static getThumbnail (server, file) {
-      if (true) {
         let fullPath = server + "/thumbnails/" + file;
         console.log('getThumbnail ' + fullPath);
         return {uri: fullPath};
-      }
 
-
-        // https://forums.expo.io/t/folder-location-for-dynamic-local-images/2438/3
-        switch (file)
-        {
-            case 'cocacola.jpg':
-                return require('../../test/thumbnails/cocacola.jpg');
-
-            case 'coco.jpg':
-                return require('../../test/thumbnails/coco.jpg');
-
-            case 'fifa18.jpg':
-                return require('../../test/thumbnails/fifa18.jpg');
-
-            case 'hot_nuts.jpg':
-                return require('../../test/thumbnails/hot_nuts.jpg');
-
-            case 'kite_surfing.jpg':
-                return require('../../test/thumbnails/kite_surfing.jpg');
-
-            case 'samsung_tle.jpg':
-                return require('../../test/thumbnails/samsung_tle.jpg');
-
-            case 'xmen_apo_magneto_en.jpg':
-                return require('../../test/thumbnails/xmen_apo_magneto_en.jpg');
-
-        }
-        return {uri: './unknown.jpg'};
+        // return {uri: './unknown.jpg'};
     };
 
     static getDefaultThumbnail () {
