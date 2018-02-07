@@ -7,6 +7,7 @@
 //
 
 #import "RimWebView.h"
+#import "RCTWebView+Custom.h"
 
 @interface RimWebView ()
 
@@ -14,5 +15,11 @@
 
 @implementation RimWebView
 
+- (BOOL)webView:(__unused UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
+{
+    BOOL allowed = [super webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
+    
+    return allowed;
+}
 
 @end

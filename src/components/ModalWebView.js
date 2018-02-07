@@ -36,7 +36,11 @@ export default class ModalWebView extends Component {
                         width: this.props.modalWidth,
                         height: this.props.modalHeight
                     },
-                    this.props.modalViewStyle
+                    this.props.modalViewStyle,
+                    {
+                        backgroundColor: 'red',
+                        flex: 1
+                    }
                 ]}
             >
                     <RimWebview
@@ -48,7 +52,7 @@ export default class ModalWebView extends Component {
                         allowsInlineMediaPlayback={true}
                         mediaPlaybackRequiresUserAction={false}
                         style={[this.props.modalWebViewStyle]}
-                        //source={{uri: this.state.modalUrl}}
+                        //source={{uri: this.props.modalUrl}}
                         source={this.props.modalUrl}
                         onError={(event) => {
                             console.log('webview error ' + event.url);
