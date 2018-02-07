@@ -13,13 +13,17 @@
 
 @end
 
-@implementation RimWebView
+@implementation RimWebView { }
 
 - (BOOL)webView:(__unused UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType
 {
     BOOL allowed = [super webView:webView shouldStartLoadWithRequest:request navigationType:navigationType];
     
+    NSLog(@"1111 shouldStartLoadWithRequest %@", request.URL.absoluteString);
+    NSLog(@"2222 %@", [self.enableUrlPrefixes description]);
+    
     return allowed;
 }
 
 @end
+

@@ -8,7 +8,7 @@ import {
 
 import global, { AppWidth, AppHeight } from '../common/global';
 
-import RimWebview from '../../_library/rim-webview';
+import RimWebView from '../../_library/rim-webview';
 
 export default class ModalWebView extends Component {
     constructor(props) {
@@ -43,7 +43,7 @@ export default class ModalWebView extends Component {
                     }
                 ]}
             >
-                    <RimWebview
+                    <RimWebView
                         ref={ (com) => this.rimWebView = com }
                         urlPrefixesForDefaultIntent={this.props.modalUrlPrefixesForDefaultIntent}
                         enableUrlPrefixes={this.props.modalEnableUrlPrefixes}

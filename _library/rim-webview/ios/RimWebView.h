@@ -10,4 +10,6 @@
 
 @interface RimWebView : RCTWebView
 
+@property (nonatomic, copy) NSArray *enableUrlPrefixes;
+
 @end
