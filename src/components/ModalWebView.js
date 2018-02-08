@@ -36,11 +36,7 @@ export default class ModalWebView extends Component {
                         width: this.props.modalWidth,
                         height: this.props.modalHeight
                     },
-                    this.props.modalViewStyle,
-                    {
-                        backgroundColor: 'red',
-                        flex: 1
-                    }
+                    this.props.modalViewStyle
                 ]}
             >
                     <RimWebView
@@ -49,6 +45,8 @@ export default class ModalWebView extends Component {
                         enableUrlPrefixes={this.props.modalEnableUrlPrefixes}
                         scalesPageToFit={true}
                         javaScriptEnabled={true}
+                        // Fixed: iOS error
+                        injectedJavaScript="window.postMessage = String(Object.hasOwnProperty).replace('hasOwnProperty', 'postMessage');"
                         allowsInlineMediaPlayback={true}
                         mediaPlaybackRequiresUserAction={false}
                         style={[this.props.modalWebViewStyle]}
@@ -62,18 +60,18 @@ export default class ModalWebView extends Component {
                                 this.props.onModalMessage(event);
                             }
                         }}
-                        onShouldStartLoadWithRequest={(event) => {
-                            // for Android: pls check
-                            // https://github.com/cbrevik/webview-native-config-example
-                            console.log('webview onShouldStartLoadWithRequest ' + event.url);
-                            return true;
-                        }}
-                        onNavigationStateChange={(event) => {
-                            console.log('webview onNavigationStateChange ' + event.url);
-                        }}
-                        onLoadStart={(event) => {
-                            console.log('webview onLoadStart ' + event.url);
-                        }}
+                        // onShouldStartLoadWithRequest={(event) => {
+                        //     // for Android: pls check
+                        //     // https://github.com/cbrevik/webview-native-config-example
+                        //     console.log('webview onShouldStartLoadWithRequest ' + event.url);
+                        //     return true;
+                        // }}
+                        // onNavigationStateChange={(event) => {
+                        //     console.log('webview onNavigationStateChange ' + event.url);
+                        // }}
+                        // onLoadStart={(event) => {
+                        //     console.log('webview onLoadStart ' + event.url);
+                        // }}
                     />
             </View>
         );

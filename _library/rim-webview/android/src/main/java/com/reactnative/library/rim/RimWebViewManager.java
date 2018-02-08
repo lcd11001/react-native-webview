@@ -120,15 +120,11 @@ public class RimWebViewManager extends ReactWebViewManager {
                             String newUrl = url;
                             if (sValue.compareToIgnoreCase("remove") == 0) {
                                 newUrl = url.replace(key, "");
-                                bValue = false;
                                 // Log.d(REACT_CLASS, "urlPrefix => newUrl " + newUrl);
-                            }
-
-                            if (!bValue) {
                                 return super.shouldOverrideUrlLoading(view, newUrl);
                             }
 
-                            return bValue;
+                            return bValue == false; // not same as iOS
                         }
                     }
                 }

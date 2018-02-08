@@ -11,6 +11,7 @@
 
 @interface RCTWebView (Custom)
 
+- (NSMutableDictionary<NSString *, id> *)baseEvent;
 - (BOOL)webView:(__unused UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType;
 
 @end

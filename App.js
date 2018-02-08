@@ -184,9 +184,9 @@ export default class App extends React.Component {
 
         modalUrlPrefixesForDefaultIntent={['http://', 'https://']}
         modalEnableUrlPrefixes={[
-          {'expand:': true},
-          {'exit:': true}, 
-          {'link:': true}
+          {'expand:': false},
+          {'exit:': false}, 
+          {'link:': false}
         ]}
 
         modalRotateZ={this.state.modalRotateZ}
