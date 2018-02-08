@@ -90,6 +90,7 @@ export default class App extends React.Component {
     });
 
     BackHandler.addEventListener('hardwareBackPress', this.handlerBackButton);
+    Orientation.lockToPortrait();
   }
 
   componentWillMount() {
@@ -318,10 +319,19 @@ export default class App extends React.Component {
 
   onModalClose() {
     console.log('onModalClose');
+
+    let {deg, width, height, x, y} = this.rotateView('portrait');
+
     this.setState({
         modalVisible: false,
         modalStyle: {},
-        modalCanOpenUrl: false
+        modalCanOpenUrl: false,
+
+        modalRotateZ: deg,
+        modalTranslateX: x,
+        modalTranslateY: y,
+        modalWidth: width,
+        modalHeight: height,
     })
 
     StatusBar.setHidden(false);

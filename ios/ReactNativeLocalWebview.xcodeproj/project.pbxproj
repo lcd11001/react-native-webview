@@ -1353,8 +1353,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
-					"$(SRCROOT)..\node_modules\neact-native-orientationiOSRCTOrientation/**",
-					"$(SRCROOT).._library\nim-webviewios",
+					"$(SRCROOT)/../node_modules/react-native-orientation/ios/RCTOrientation/**",
+					"$(SRCROOT)/../_library/rim-webview/ios/**",
 				);
 				INFOPLIST_FILE = ReactNativeLocalWebview/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1376,8 +1376,8 @@
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/../node_modules/react-native-fs/**",
-					"$(SRCROOT)..\node_modules\neact-native-orientationiOSRCTOrientation/**",
-					"$(SRCROOT).._library\nim-webviewios",
+					"$(SRCROOT)/../node_modules/react-native-orientation/ios/RCTOrientation/**",
+					"$(SRCROOT)/../_library/rim-webview/ios/**",
 				);
 				INFOPLIST_FILE = ReactNativeLocalWebview/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
