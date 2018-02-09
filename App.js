@@ -30,6 +30,8 @@ import ModalWebView from './src/components/ModalWebView';
 
 const AutoBind = require('auto-bind');
 
+const AppBackgroundColor = '#FCE5BD';
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
@@ -59,6 +61,7 @@ export default class App extends React.Component {
       safeViewPaddingLeft: 0,
       safeViewPaddingRight: 0,
       safeViewPaddingBottom: 0,
+      safeViewBackgroundColor: AppBackgroundColor
     }
 
 
@@ -127,14 +130,14 @@ export default class App extends React.Component {
 
       return (
         <SafeAreaView 
-          ref={(com) => safeAreaView = com}
+          ref={(com) => this.safeAreaView = com}
           forceInset={{
             top: 'always', 
             left: 'always', 
             right: 'always', 
             bottom: 'always'
           }} 
-          style={{flex: 1, backgroundColor: 'red'}} 
+          style={{flex: 1, backgroundColor: this.state.safeViewBackgroundColor}} 
         >
         <View 
           style={styles.container}
@@ -298,11 +301,14 @@ export default class App extends React.Component {
       return style;
     }
 
+    var W = AppWidth - this.state.safeViewPaddingLeft - this.state.safeViewPaddingRight;
+    var H = AppHeight  - this.state.safeViewPaddingTop - this.state.safeViewPaddingBottom;
+
     var toEdge = style.snap;
     var snapStyle = {
       position: style.position || 'relative',
-      width: style.width || AppWidth,
-      height: style.height || AppHeight,
+      width: style.width || W,
+      height: style.height || H,
       left: 0,
       top: 0
     };
@@ -310,22 +316,22 @@ export default class App extends React.Component {
     switch (toEdge) {
       case 'top':
         snapStyle.top = 0;
-        snapStyle.left = (AppWidth - snapStyle.width) / 2;
+        snapStyle.left = (W - snapStyle.width) / 2;
       break;
 
       case 'bottom':
-        snapStyle.top = AppHeight - snapStyle.height;
-        snapStyle.left = (AppWidth - snapStyle.width) / 2;
+        snapStyle.top = H - snapStyle.height;
+        snapStyle.left = (W - snapStyle.width) / 2;
       break;
 
       case 'left':
-        snapStyle.top = (AppHeight - snapStyle.height) / 2;
+        snapStyle.top = (H - snapStyle.height) / 2;
         snapStyle.left = 0;
       break;
 
       case 'right':
-        snapStyle.top = (AppHeight - snapStyle.height) / 2;
-        snapStyle.left = AppWidth - snapStyle.width;
+        snapStyle.top = (H - snapStyle.height) / 2;
+        snapStyle.left = W - snapStyle.width;
       break;
 
       default:
@@ -363,7 +369,8 @@ export default class App extends React.Component {
         modalWidth: width,
         modalHeight: height,
         modalStyle: style,
-        modalCanOpenUrl: item.type !== 'VBAN'
+        modalCanOpenUrl: item.type !== 'VBAN',
+        safeViewBackgroundColor: item.type !== 'VBAN' ? 'black' : AppBackgroundColor
     });
   }
 
@@ -373,7 +380,8 @@ export default class App extends React.Component {
     this.setState({
         modalVisible: false,
         modalStyle: {},
-        modalCanOpenUrl: false
+        modalCanOpenUrl: false,
+        safeViewBackgroundColor: AppBackgroundColor
     })
 
     StatusBar.setHidden(false);
@@ -391,6 +399,7 @@ export default class App extends React.Component {
         modalWidth: width,
         modalHeight: height,
         modalStyle: {},
+        safeViewBackgroundColor: 'black'
     });
   }
 
@@ -488,7 +497,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexWrap: 'wrap',
     flexDirection: 'column',
-    backgroundColor: '#FCE5BD',
+    backgroundColor: AppBackgroundColor,
     alignItems: 'center',
     justifyContent: 'flex-start',
   },
