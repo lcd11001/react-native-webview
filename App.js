@@ -24,13 +24,14 @@ import Orientation from 'react-native-orientation';
 
 import RimWebview from './_library/rim-webview';
 
-import global, { AppWidth, AppHeight } from './src/common/global';
+import global from './src/common/global';
 import CatalogItem from './src/components/CatalogItem';
 import ModalWebView from './src/components/ModalWebView';
 
 const AutoBind = require('auto-bind');
 
 const AppBackgroundColor = '#FCE5BD';
+var {width: AppWidth, height: AppHeight} = Dimensions.get('window');
 
 export default class App extends React.Component {
   constructor(props) {
@@ -148,6 +149,7 @@ export default class App extends React.Component {
            */
           onLayout={ (event) => {
             let layout = event.nativeEvent.layout;
+            var {width: AppWidth, height: AppHeight} = Dimensions.get('window');
             console.log('AppWidth ' + AppWidth + ' AppHeight ' + AppHeight);
             console.log('subview onLayout ' + JSON.stringify(layout, null, 2));
             let paddingTop = layout.y;
@@ -353,25 +355,30 @@ export default class App extends React.Component {
     console.log('onModalOpen ' + orientation);
     StatusBar.setHidden(true);
 
-    let {deg, width, height, x, y} = this.rotateView(orientation);
-
     if (orientation.indexOf('force-landscape') != -1) {
       console.log('change device to landscape');
       Orientation.lockToLandscape();
     }
 
-    this.setState({
-        modalVisible: true,
-        modalUrl: url,
-        modalRotateZ: deg,
-        modalTranslateX: x,
-        modalTranslateY: y,
-        modalWidth: width,
-        modalHeight: height,
-        modalStyle: style,
-        modalCanOpenUrl: item.type !== 'VBAN',
-        safeViewBackgroundColor: item.type !== 'VBAN' ? 'black' : AppBackgroundColor
-    });
+    // fixed: Android need time to hide status bar
+    // fixed: iOS need time to rotate UIView
+    let self = this;
+    setTimeout(function(){
+      let {deg, width, height, x, y} = self.rotateView(orientation);
+
+      self.setState({
+          modalVisible: true,
+          modalUrl: url,
+          modalRotateZ: deg,
+          modalTranslateX: x,
+          modalTranslateY: y,
+          modalWidth: width,
+          modalHeight: height,
+          modalStyle: style,
+          modalCanOpenUrl: item.type !== 'VBAN',
+          safeViewBackgroundColor: item.type !== 'VBAN' ? 'black' : AppBackgroundColor
+      });
+    }, 500);
   }
 
   onModalClose() {
