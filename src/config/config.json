@@ -74,6 +74,16 @@
             "orientation": "landscape",
             "type": "M-INT",
             "path": "xmen_apo_magneto_en"
+        },
+
+        {
+            "id": 7,
+            "title": "Be Hien",
+            "description": "Test VHero 3",
+            "thumbnail": "abc.jpg",
+            "orientation": "landscape",
+            "type": "VHERO",
+            "path": "release"
         }
     ]
 }

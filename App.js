@@ -53,7 +53,12 @@ export default class App extends React.Component {
       serverUrl: '',
       appOrientation: 'unknown',
 
-      isShowingExitDialog: false
+      isShowingExitDialog: false,
+
+      safeViewPaddingTop: 0,
+      safeViewPaddingLeft: 0,
+      safeViewPaddingRight: 0,
+      safeViewPaddingBottom: 0,
     }
 
 
@@ -121,8 +126,43 @@ export default class App extends React.Component {
       }
 
       return (
-        <View style={styles.container}>
-          <SafeAreaView forceInset={{ top: 'always' }} style={{backgroundColor: 'red'}} />
+        <SafeAreaView 
+          ref={(com) => safeAreaView = com}
+          forceInset={{
+            top: 'always', 
+            left: 'always', 
+            right: 'always', 
+            bottom: 'always'
+          }} 
+          style={{flex: 1, backgroundColor: 'red'}} 
+        >
+        <View 
+          style={styles.container}
+          /**
+           * Invoked on mount and layout changes with
+           *
+           * {nativeEvent: { layout: {x, y, width, height}}}.
+           */
+          onLayout={ (event) => {
+            let layout = event.nativeEvent.layout;
+            console.log('AppWidth ' + AppWidth + ' AppHeight ' + AppHeight);
+            console.log('subview onLayout ' + JSON.stringify(layout, null, 2));
+            let paddingTop = layout.y;
+            let paddingLeft = layout.x;
+            let paddingRight = AppWidth - layout.width - paddingLeft;
+            let paddingBottom = AppHeight - layout.height - paddingTop;
+
+            let padding = {
+              safeViewPaddingTop : paddingTop,
+              safeViewPaddingLeft: paddingLeft,
+              safeViewPaddingRight: paddingRight,
+              safeViewPaddingBottom: paddingBottom
+            }
+            console.log('padding ' + JSON.stringify(padding, null, 2));
+            this.setState(padding);
+          }}
+        >
+          
           <Text 
             style={styles.header}
             adjustsFontSizeToFit={false} // use global.getFontSize instead
@@ -151,9 +191,11 @@ export default class App extends React.Component {
               );
             } }
           />
-
-          {this.renderModal()}
         </View>
+
+        {this.renderModal()}
+
+        </SafeAreaView>
       );
     }
 
@@ -215,22 +257,30 @@ export default class App extends React.Component {
   }
 
   rotateView(orientation) {
-    var width = AppWidth;
-    var height = AppHeight;
+    var W = AppWidth - this.state.safeViewPaddingLeft - this.state.safeViewPaddingRight;
+    var H = AppHeight  - this.state.safeViewPaddingTop - this.state.safeViewPaddingBottom;
+    var X = this.state.safeViewPaddingLeft;
+    var Y = this.state.safeViewPaddingTop;
+
+    var width = W;
+    var height = H;
     var deg = '0deg';
-    var x = 0;
-    var y = 0;
+    var x = X;
+    var y = Y;
 
     if (orientation.indexOf('force-landscape') != -1) {
-      width = AppHeight;
-      height = AppWidth;
+      width = H;
+      height = W;
+
+      x = this.state.safeViewPaddingTop;
+      y = this.state.safeViewPaddingLeft;
     }
     else if (orientation.indexOf('landscape') != -1) {
       deg = '90deg';
-      width = AppHeight;
-      height = AppWidth;
-      x = (width - AppWidth) / 2;
-      y = -(height - AppHeight) / 2;
+      width = H;
+      height = W;
+      x = (width - W) / 2 + this.state.safeViewPaddingTop;
+      y = -(height - H) / 2 - this.state.safeViewPaddingLeft;
     }
 
     return ({
@@ -320,18 +370,10 @@ export default class App extends React.Component {
   onModalClose() {
     console.log('onModalClose');
 
-    let {deg, width, height, x, y} = this.rotateView('portrait');
-
     this.setState({
         modalVisible: false,
         modalStyle: {},
-        modalCanOpenUrl: false,
-
-        modalRotateZ: deg,
-        modalTranslateX: x,
-        modalTranslateY: y,
-        modalWidth: width,
-        modalHeight: height,
+        modalCanOpenUrl: false
     })
 
     StatusBar.setHidden(false);
