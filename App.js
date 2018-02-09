@@ -31,7 +31,8 @@ import ModalWebView from './src/components/ModalWebView';
 const AutoBind = require('auto-bind');
 
 const AppBackgroundColor = '#FCE5BD';
-var {width: AppWidth, height: AppHeight} = Dimensions.get('window');
+var AppWidth = Dimensions.get('window').width;
+var AppHeight = Dimensions.get('window').height;
 
 export default class App extends React.Component {
   constructor(props) {
@@ -149,7 +150,10 @@ export default class App extends React.Component {
            */
           onLayout={ (event) => {
             let layout = event.nativeEvent.layout;
-            var {width: AppWidth, height: AppHeight} = Dimensions.get('window');
+
+            // refresh screen size
+            AppWidth = Dimensions.get('window').width;
+            AppHeight = Dimensions.get('window').height;
             console.log('AppWidth ' + AppWidth + ' AppHeight ' + AppHeight);
             console.log('subview onLayout ' + JSON.stringify(layout, null, 2));
             let paddingTop = layout.y;
@@ -274,11 +278,12 @@ export default class App extends React.Component {
     var y = Y;
 
     if (orientation.indexOf('force-landscape') != -1) {
-      width = H;
-      height = W;
-
-      x = this.state.safeViewPaddingTop;
-      y = this.state.safeViewPaddingLeft;
+      if (W > H) {
+        // do nothing as we refresh screen size already
+      } else {
+        // * fixed: iOS sometimes the view does not rotate correctly
+        console.log('*** warning:  rotate incorrect **** => fixed me');
+      }
     }
     else if (orientation.indexOf('landscape') != -1) {
       deg = '90deg';
@@ -355,13 +360,17 @@ export default class App extends React.Component {
     console.log('onModalOpen ' + orientation);
     StatusBar.setHidden(true);
 
+    // fixed: Android need time to hide status bar
+    let timeout = 500;
+
     if (orientation.indexOf('force-landscape') != -1) {
       console.log('change device to landscape');
       Orientation.lockToLandscape();
-    }
 
-    // fixed: Android need time to hide status bar
-    // fixed: iOS need time to rotate UIView
+      // fixed: iOS need time to rotate UIView
+      timeout = 1000;
+    }
+    
     let self = this;
     setTimeout(function(){
       let {deg, width, height, x, y} = self.rotateView(orientation);
@@ -378,7 +387,7 @@ export default class App extends React.Component {
           modalCanOpenUrl: item.type !== 'VBAN',
           safeViewBackgroundColor: item.type !== 'VBAN' ? 'black' : AppBackgroundColor
       });
-    }, 500);
+    }, timeout);
   }
 
   onModalClose() {
