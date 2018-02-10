@@ -42,7 +42,7 @@ export default class App extends React.Component {
     this.state = {
       isReady: false,
       delaySplash: 2000, // miliseconds
-      
+
       modalVisible: false,
       modalUrl: '',
       modalCanOpenUrl: false,
@@ -52,6 +52,7 @@ export default class App extends React.Component {
       modalWidth: '100%',
       modalHeight: '100%',
       modalStyle: {},
+      modalOrientation: '',
 
       serverStatus: 0, // -1: false, 0: not created, 1: success
       serverUrl: '',
@@ -118,7 +119,7 @@ export default class App extends React.Component {
       if (this.state.serverStatus == -1) {
         return (
           <View style={[styles.container, {justifyContent: 'center'}]}>
-            <Text 
+            <Text
               style={styles.header}
               adjustsFontSizeToFit={false} // use global.getFontSize instead
               allowFontScaling={false}
@@ -131,48 +132,25 @@ export default class App extends React.Component {
       }
 
       return (
-        <SafeAreaView 
+        <SafeAreaView
           ref={(com) => this.safeAreaView = com}
           forceInset={{
-            top: 'always', 
-            left: 'always', 
-            right: 'always', 
+            top: 'always',
+            left: 'always',
+            right: 'always',
             bottom: 'always'
-          }} 
-          style={{flex: 1, backgroundColor: this.state.safeViewBackgroundColor}} 
+          }}
+          style={{flex: 1, backgroundColor: this.state.safeViewBackgroundColor}}
         >
-        <View 
+        <View
           style={styles.container}
-          /**
-           * Invoked on mount and layout changes with
-           *
-           * {nativeEvent: { layout: {x, y, width, height}}}.
-           */
           onLayout={ (event) => {
             let layout = event.nativeEvent.layout;
-
-            // refresh screen size
-            AppWidth = Dimensions.get('window').width;
-            AppHeight = Dimensions.get('window').height;
-            console.log('AppWidth ' + AppWidth + ' AppHeight ' + AppHeight);
-            console.log('subview onLayout ' + JSON.stringify(layout, null, 2));
-            let paddingTop = layout.y;
-            let paddingLeft = layout.x;
-            let paddingRight = AppWidth - layout.width - paddingLeft;
-            let paddingBottom = AppHeight - layout.height - paddingTop;
-
-            let padding = {
-              safeViewPaddingTop : paddingTop,
-              safeViewPaddingLeft: paddingLeft,
-              safeViewPaddingRight: paddingRight,
-              safeViewPaddingBottom: paddingBottom
-            }
-            console.log('padding ' + JSON.stringify(padding, null, 2));
-            this.setState(padding);
+            this.onModalLayout(layout);
           }}
         >
-          
-          <Text 
+
+          <Text
             style={styles.header}
             adjustsFontSizeToFit={false} // use global.getFontSize instead
             allowFontScaling={false}
@@ -226,9 +204,9 @@ export default class App extends React.Component {
       <ModalWebView
         modalVisible={this.state.modalVisible}
         modalUrl={global.getHtml(this.state.serverUrl, this.state.modalUrl)}
-        
+
         modalViewStyle={[
-          styles.modal, 
+          styles.modal,
           styles.modalContent,
           modalSnapStyle
         ]}
@@ -237,7 +215,7 @@ export default class App extends React.Component {
         modalUrlPrefixesForDefaultIntent={['http://', 'https://']}
         modalEnableUrlPrefixes={[
           {'expand:': false},
-          {'exit:': false}, 
+          {'exit:': false},
           {'link:': false}
         ]}
 
@@ -251,7 +229,7 @@ export default class App extends React.Component {
         onModalMessage={(event) => {
           let data = event.nativeEvent.data;
           console.log('onModalMessage ' + data);
-          
+
           if (data === 'exit:') {
             this.onModalClose();
           } else if (data === 'expand:') {
@@ -271,6 +249,8 @@ export default class App extends React.Component {
     var X = this.state.safeViewPaddingLeft;
     var Y = this.state.safeViewPaddingTop;
 
+    console.log('rotateView ' + orientation);
+    console.log('rotateView => W ' + W + ' H ' + H + ' X ' + X + ' Y ' + Y);
     var width = W;
     var height = H;
     var deg = '0deg';
@@ -283,6 +263,11 @@ export default class App extends React.Component {
       } else {
         // * fixed: iOS sometimes the view does not rotate correctly
         console.log('*** warning:  rotate incorrect **** => fixed me');
+        deg = '90deg';
+        width = H;
+        height = W;
+        x = (width - W) / 2 + this.state.safeViewPaddingTop;
+        y = -(height - H) / 2 - this.state.safeViewPaddingLeft;
       }
     }
     else if (orientation.indexOf('landscape') != -1) {
@@ -293,12 +278,12 @@ export default class App extends React.Component {
       y = -(height - H) / 2 - this.state.safeViewPaddingLeft;
     }
 
-    return ({
-      deg: deg,
-      width: width,
-      height: height,
-      x: x,
-      y: y
+    this.setState({
+        modalRotateZ: deg,
+        modalTranslateX: x,
+        modalTranslateY: y,
+        modalWidth: width,
+        modalHeight: height
     });
   }
 
@@ -350,7 +335,7 @@ export default class App extends React.Component {
   }
 
   onModalOpen(item) {
-    let url = item.path; 
+    let url = item.path;
     let orientation = item.orientation;
     let style = {};
     if (item.hasOwnProperty("style")) {
@@ -361,33 +346,27 @@ export default class App extends React.Component {
     StatusBar.setHidden(true);
 
     // fixed: Android need time to hide status bar
-    let timeout = 500;
+    //let timeout = 500;
 
     if (orientation.indexOf('force-landscape') != -1) {
       console.log('change device to landscape');
       Orientation.lockToLandscape();
 
       // fixed: iOS need time to rotate UIView
-      timeout = 1000;
+      //timeout = 1000;
     }
-    
-    let self = this;
-    setTimeout(function(){
-      let {deg, width, height, x, y} = self.rotateView(orientation);
 
-      self.setState({
-          modalVisible: true,
-          modalUrl: url,
-          modalRotateZ: deg,
-          modalTranslateX: x,
-          modalTranslateY: y,
-          modalWidth: width,
-          modalHeight: height,
-          modalStyle: style,
-          modalCanOpenUrl: item.type !== 'VBAN',
-          safeViewBackgroundColor: item.type !== 'VBAN' ? 'black' : AppBackgroundColor
-      });
-    }, timeout);
+    this.rotateView(orientation);
+
+    this.setState({
+        modalVisible: true,
+        modalUrl: url,
+        modalStyle: style,
+        modalCanOpenUrl: item.type !== 'VBAN',
+        modalOrientation: orientation,
+
+        safeViewBackgroundColor: item.type !== 'VBAN' ? 'black' : AppBackgroundColor
+    });
   }
 
   onModalClose() {
@@ -397,23 +376,19 @@ export default class App extends React.Component {
         modalVisible: false,
         modalStyle: {},
         modalCanOpenUrl: false,
+        modalOrientation: '',
         safeViewBackgroundColor: AppBackgroundColor
     })
 
     StatusBar.setHidden(false);
-    
+
     console.log('revert to ' + this.state.appOrientation)
     Orientation.lockToPortrait();
   }
 
   onModalExpand() {
-    let {deg, width, height, x, y} = this.rotateView('landscape');
+    this.rotateView('landscape');
     this.setState({
-        modalRotateZ: deg,
-        modalTranslateX: x,
-        modalTranslateY: y,
-        modalWidth: width,
-        modalHeight: height,
         modalStyle: {},
         safeViewBackgroundColor: 'black'
     });
@@ -432,11 +407,34 @@ export default class App extends React.Component {
             modalCanOpenUrl: true
           });
         }
-        
+
       } else {
         console.log("Don't know how to open URI " + url);
       }
     });
+  }
+
+  onModalLayout(layout) {
+    // refresh screen size
+    AppWidth = Dimensions.get('window').width;
+    AppHeight = Dimensions.get('window').height;
+    console.log('rotateView AppWidth ' + AppWidth + ' AppHeight ' + AppHeight);
+    console.log('rotateView subview onLayout ' + JSON.stringify(layout));
+    let paddingTop = layout.y;
+    let paddingLeft = layout.x;
+    let paddingRight = AppWidth - layout.width - paddingLeft;
+    let paddingBottom = AppHeight - layout.height - paddingTop;
+
+    let padding = {
+      safeViewPaddingTop : paddingTop,
+      safeViewPaddingLeft: paddingLeft,
+      safeViewPaddingRight: paddingRight,
+      safeViewPaddingBottom: paddingBottom
+    };
+    console.log('rotateView padding ' + JSON.stringify(padding));
+    this.setState(padding);
+
+    this.rotateView(this.state.modalOrientation);
   }
 
   delay(t) {
@@ -481,8 +479,8 @@ export default class App extends React.Component {
       'Would you like to exit the app?',
       [
         {
-          text: 'Cancel', 
-          onPress: () => { 
+          text: 'Cancel',
+          onPress: () => {
             // console.log('cancel clicked');
             this.setState({
               isShowingExitDialog: false
@@ -492,10 +490,10 @@ export default class App extends React.Component {
         },
         {
           text: 'OK',
-          onPress: () => { 
-            // console.log('OK clicked'); 
+          onPress: () => {
+            // console.log('OK clicked');
             this.server.kill();
-            BackHandler.exitApp(); 
+            BackHandler.exitApp();
           }
         }
       ],
